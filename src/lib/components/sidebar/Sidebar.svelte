@@ -1,85 +1,102 @@
 <script lang="ts">
-    import { page } from '$app/stores';
-  import { HelpCircle } from '@lucide/svelte';
-    // Импортируем иконки из твоего пакета lucide-svelte
-    import { Home, Globe, MessageSquare, Clover, UserPlus,  } from '@lucide/svelte';
+	import { page } from '$app/state';
+	import type { Component } from 'svelte';
+	import { LayoutDashboard, Users, HelpCircle } from '@lucide/svelte';
 
-    function isActive(href: string) {
-        if (href === '/') return $page.url.pathname === '/';
-        return $page.url.pathname.startsWith(href);
-    }
+	type NavItem = { href: string; label: string; icon: Component };
+
+	const navItems: NavItem[] = [
+		{ href: '/', label: 'Головна', icon: LayoutDashboard },
+		{ href: '/users', label: 'Користувачі', icon: Users }
+	];
+
+	const pathname = $derived(page.url.pathname);
+
+	function isActive(href: string): boolean {
+		if (href === '/') return pathname === '/';
+		return pathname === href || pathname.startsWith(href + '/');
+	}
 </script>
 
-<div class="h-full bg-[#f8f9fa]   flex items-stretch">
-    
-    <aside class="flex w-[68px] shrink-0 flex-col items-center bg-[#0d0d0f] py-4 px-1 rounded-2xl text-white">
-        
-        <a href="/" class="group relative flex w-full flex-col items-center gap-1 py-2 no-underline">
-            {#if isActive('/')}
-                <span class="absolute top-1 left-1/2 -translate-x-1/2 w-10 h-10 rounded-full bg-gradient-to-tr from-[#b5179e] via-[#7209b7] to-[#4cc9f0] opacity-75 blur-md pointer-events-none z-0"></span>
-            {/if}
-            
-            <span class="relative z-10 flex h-6 w-6 items-center justify-center transition-transform duration-200 group-hover:scale-105">
-                <Home size={20} strokeWidth={2} />
-            </span>
-            <span class="relative z-10 text-[10px] font-medium tracking-wide transition-colors duration-150 {isActive('/') ? 'text-white' : 'text-[#7e7e86] group-hover:text-white'}">
-                Home
-            </span>
-        </a>
+<nav
+	aria-label="Головна навігація"
+	class="sidebar bg-sidebar text-sidebar-foreground flex h-full w-16 shrink-0 flex-col items-center rounded-2xl py-3"
+>
+	<div class="flex w-full flex-col items-center gap-1 px-1.5">
+		{#each navItems as item (item.href)}
+			{@const active = isActive(item.href)}
+			<a
+				href={item.href}
+				aria-current={active ? 'page' : undefined}
+				title={item.label}
+				class="nav-item group relative flex w-full flex-col items-center gap-1 rounded-xl py-2 no-underline outline-none focus-visible:ring-2 focus-visible:ring-[var(--sidebar-ring)]"
+				class:is-active={active}
+			>
+				<span class="glow" aria-hidden="true"></span>
+				<span class="relative z-10 flex size-6 items-center justify-center">
+					<item.icon size={20} strokeWidth={active ? 2 : 1.8} aria-hidden="true" />
+				</span>
+				<span class="relative z-10 text-[10px] leading-none font-medium tracking-tight">
+					{item.label}
+				</span>
+			</a>
+		{/each}
+	</div>
 
-        <a href="/spaces" class="group flex w-full flex-col items-center gap-1 py-2.5 no-underline">
-            <span class="flex h-6 w-6 items-center justify-center transition-transform duration-200 group-hover:scale-105 {isActive('/spaces') ? 'text-white' : 'text-[#7e7e86] group-hover:text-white'}">
-                <Globe size={20} strokeWidth={1.8} />
-            </span>
-            <span class="text-[10px] font-medium tracking-wide transition-colors duration-150 {isActive('/spaces') ? 'text-white' : 'text-[#7e7e86] group-hover:text-white'}">
-                Spaces
-            </span>
-        </a>
+	<div class="bg-sidebar-border my-2 h-px w-8"></div>
 
-        <a href="/chat" class="group flex w-full flex-col items-center gap-1 py-2.5 no-underline">
-            <span class="flex h-6 w-6 items-center justify-center transition-transform duration-200 group-hover:scale-105 {isActive('/chat') ? 'text-white' : 'text-[#7e7e86] group-hover:text-white'}">
-                <MessageSquare size={20} strokeWidth={1.8} />
-            </span>
-            <span class="text-[10px] font-medium tracking-wide transition-colors duration-150 {isActive('/chat') ? 'text-white' : 'text-[#7e7e86] group-hover:text-white'}">
-                Chat
-            </span>
-        </a>
+	<div class="mt-auto flex w-full flex-col items-center gap-1 px-1.5">
+		<a
+			href="/help"
+			title="Допомога"
+			class="nav-item group relative flex w-full flex-col items-center gap-1 rounded-xl py-2 no-underline outline-none focus-visible:ring-2 focus-visible:ring-[var(--sidebar-ring)]"
+		>
+			<span class="glow" aria-hidden="true"></span>
+			<span class="relative z-10 flex size-6 items-center justify-center">
+				<HelpCircle size={20} strokeWidth={1.8} aria-hidden="true" />
+			</span>
+			<span class="relative z-10 text-[10px] leading-none font-medium tracking-tight">
+				Довідка
+			</span>
+		</a>
+	</div>
+</nav>
 
-        <a href="/brain" class="group flex w-full flex-col items-center gap-1 py-2.5 no-underline">
-            <span class="flex h-6 w-6 items-center justify-center transition-transform duration-200 group-hover:scale-105 {isActive('/brain') ? 'text-white' : 'text-[#7e7e86] group-hover:text-white'}">
-                <Clover size={20} strokeWidth={1.8} />
-            </span>
-            <span class="text-[10px] font-medium tracking-wide transition-colors duration-150 {isActive('/brain') ? 'text-white' : 'text-[#7e7e86] group-hover:text-white'}">
-                Brain
-            </span>
-        </a>
+<style>
+	.sidebar {
+		--glow-from: #b5179e;
+		--glow-via: #7209b7;
+		--glow-to: #4cc9f0;
+		--glow-size: 2.5rem;
+		--glow-blur: 12px;
+		--glow-opacity: 0.75;
+	}
 
-        <a href="/apps" class="group flex w-full flex-col items-center gap-1 py-2.5 no-underline">
-            <span class="grid h-5 w-5 grid-cols-2 gap-0.5 p-0.5 transition-transform duration-200 group-hover:scale-105">
-                <span class="rounded-[2px] bg-[#ef4444] opacity-90"></span>
-                <span class="rounded-[2px] bg-[#f59e0b] opacity-90"></span>
-                <span class="rounded-[2px] bg-[#a855f7] opacity-90"></span>
-                <span class="rounded-[2px] bg-[#475569] flex items-center justify-center text-[7px] font-bold text-white/90 leading-none">+</span>
-            </span>
-            <span class="text-[10px] font-medium tracking-wide transition-colors duration-150 {isActive('/apps') ? 'text-white' : 'text-[#7e7e86] group-hover:text-white'}">
-                Apps
-            </span>
-        </a>
+	.nav-item:not(.is-active) {
+		opacity: 0.6;
+	}
+	.nav-item:hover,
+	.nav-item.is-active {
+		opacity: 1;
+	}
 
-        <div class="flex-1"></div>
-
-        <a href="/invite" class="group flex w-full flex-col items-center gap-1 py-2.5 no-underline">
-            <span class="flex h-6 w-6 items-center justify-center transition-transform duration-200 group-hover:scale-105 {isActive('/invite') ? 'text-white' : 'text-[#7e7e86] group-hover:text-white'}">
-                <UserPlus size={20} strokeWidth={1.8} />
-            </span>
-            <span class="text-[10px] font-medium tracking-wide transition-colors duration-150 {isActive('/invite') ? 'text-white' : 'text-[#7e7e86] group-hover:text-white'}">
-                Invite
-            </span>
-        </a>
-
-        <a href="/help" class="group flex w-full flex-col items-center py-1.5 no-underline text-[#7e7e86] hover:text-white transition-transform duration-200 group-hover:scale-105">
-            <HelpCircle size={20} strokeWidth={1.8} />
-        </a>
-        
-    </aside>
-</div>
+	.glow {
+		position: absolute;
+		top: 0.25rem;
+		left: 50%;
+		transform: translateX(-50%);
+		width: var(--glow-size);
+		height: var(--glow-size);
+		border-radius: 9999px;
+		background: linear-gradient(to top right, var(--glow-from), var(--glow-via), var(--glow-to));
+		filter: blur(var(--glow-blur));
+		pointer-events: none;
+		z-index: 0;
+		opacity: 0;
+		transition: opacity 0.2s;
+	}
+	.nav-item:hover .glow,
+	.nav-item.is-active .glow {
+		opacity: var(--glow-opacity);
+	}
+</style>
