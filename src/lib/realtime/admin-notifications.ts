@@ -27,8 +27,8 @@ export function startAdminRealtime(): () => void {
         ? `${who} оновив профіль — потрібна перевірка`
         : `Новий майстер на верифікацію: ${who}`
       toast.notification(msg, {
+        duration: 30000,
         action: {
-          duration: 30000,
           label: 'Переглянути',
           onClick: (id: string) => {
             goto('/moderation')
