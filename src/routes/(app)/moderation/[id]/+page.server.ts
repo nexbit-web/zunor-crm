@@ -3,7 +3,7 @@ import { error, fail, redirect } from '@sveltejs/kit'
 import { z } from 'zod'
 import { requireStaff } from '$lib/server/guards'
 import { prisma } from '$lib/server/prisma'
-import { notifyStatsChanged } from '$lib/server/pusher'
+
 import type { Actions, PageServerLoad } from './$types'
 
 export const load: PageServerLoad = async ({ locals, params }) => {
@@ -123,9 +123,6 @@ export const actions: Actions = {
       masterId: params.id,
       status,
     })
-
-    // Сигнал у реальному часі: дашборд /statistics оновиться без перезавантаження
-    await notifyStatsChanged()
 
     redirect(303, '/moderation')
   },
