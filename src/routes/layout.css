@@ -157,3 +157,8 @@
     display: none; /* Chrome, Edge, Safari */
   }
 }
+
+html #nprogress .bar {
+  background: #7209b7;
+  height: 2px;
+}

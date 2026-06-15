@@ -3,6 +3,7 @@ import { error, fail, redirect } from '@sveltejs/kit'
 import { z } from 'zod'
 import { requireStaff } from '$lib/server/guards'
 import { prisma } from '$lib/server/prisma'
+import { notifyStatsChanged } from '$lib/server/pusher'
 import type { Actions, PageServerLoad } from './$types'
 
 export const load: PageServerLoad = async ({ locals, params }) => {
@@ -102,7 +103,6 @@ export const actions: Actions = {
     if (!parsed.success) return fail(400, { error: 'Невірні дані рішення.' })
 
     const { status, reason } = parsed.data
-    // Причина обовʼязкова лише для відхилення
     if (status === 'REJECTED' && (!reason || reason.length < 5)) {
       return fail(400, {
         error: 'Для відхилення вкажіть причину (мінімум 5 символів).',
@@ -123,6 +123,10 @@ export const actions: Actions = {
       masterId: params.id,
       status,
     })
+
+    // Сигнал у реальному часі: дашборд /statistics оновиться без перезавантаження
+    await notifyStatsChanged()
+
     redirect(303, '/moderation')
   },
 }

@@ -8,14 +8,14 @@
   import { Search, X, Phone, Star, ChevronRight } from '@lucide/svelte'
   import { page, navigating } from '$app/state'
   import { goto } from '$app/navigation'
-  import { onDestroy } from 'svelte'
+  import { onDestroy, untrack } from 'svelte'
   import type { PageData } from './$types'
 
   let { data }: { data: PageData } = $props()
 
   const loading = $derived(navigating.to?.url.pathname === '/masters')
 
-  let query = $state(data.q)
+  let query = $state(untrack(() => data.q))
   let timer: ReturnType<typeof setTimeout> | undefined
 
   function runSearch(): void {

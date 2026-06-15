@@ -16,6 +16,7 @@
     Ban,
   } from '@lucide/svelte'
   import type { PageData, ActionData } from './$types'
+  import { untrack } from 'svelte'
 
   let { data, form }: { data: PageData; form: ActionData } = $props()
   const m = $derived(data.master)
@@ -67,11 +68,13 @@
 
   type VStatus = 'PENDING' | 'VERIFIED' | 'REJECTED'
   const ALLOWED: VStatus[] = ['PENDING', 'VERIFIED', 'REJECTED']
-  const initialStatus: VStatus =
-    mp && ALLOWED.includes(mp.verificationStatus as VStatus)
-      ? (mp.verificationStatus as VStatus)
-      : 'PENDING'
-  let selected = $state<VStatus>(initialStatus)
+  let selected = $state<VStatus>(
+    untrack(() =>
+      mp && ALLOWED.includes(mp.verificationStatus as VStatus)
+        ? (mp.verificationStatus as VStatus)
+        : 'PENDING',
+    ),
+  )
 
   const STATUS: Record<string, { label: string; class: string }> = {
     CREATED: { label: 'Створено', class: 'bg-sky-500/15 text-sky-400' },
@@ -328,7 +331,7 @@
         {#each metaEntries as [key, value] (key)}
           <div class="flex flex-col gap-0.5">
             <dt class="text-muted-foreground text-xs">{key}</dt>
-            <dd class="text-foreground text-sm break-words">{fmtVal(value)}</dd>
+            <dd class="text-foreground text-sm wrap-break-word">{fmtVal(value)}</dd>
           </div>
         {/each}
       </dl>

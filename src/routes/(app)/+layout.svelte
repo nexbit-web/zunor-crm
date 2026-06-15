@@ -6,6 +6,22 @@
   import type { LayoutData } from './$types'
 
   let { data, children }: { data: LayoutData; children: Snippet } = $props()
+
+  import NProgress from 'nprogress'
+  import 'nprogress/nprogress.css'
+  import { beforeNavigate, afterNavigate } from '$app/navigation'
+
+  NProgress.configure({
+    showSpinner: false,
+  })
+
+  beforeNavigate(() => {
+    NProgress.start()
+  })
+
+  afterNavigate(() => {
+    NProgress.done()
+  })
 </script>
 
 <Tooltip.Provider delayDuration={200}>

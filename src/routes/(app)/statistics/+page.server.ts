@@ -3,8 +3,9 @@ import { requireStaff } from '$lib/server/guards'
 import { prisma } from '$lib/server/prisma'
 import type { PageServerLoad } from './$types'
 
-export const load: PageServerLoad = async ({ locals }) => {
+export const load: PageServerLoad = async ({ locals, depends }) => {
   requireStaff(locals)
+  depends('app:stats') // ← маркер для invalidate('app:stats')
 
   const now = new Date()
   const since = new Date(now.getFullYear(), now.getMonth() - 5, 1) // початок 6-місячного вікна
