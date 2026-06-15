@@ -5,7 +5,7 @@
   import * as Pagination from '$lib/components/ui/pagination/index.js'
   import { Input } from '$lib/components/ui/input/index.js'
   import { Skeleton } from '$lib/components/ui/skeleton/index.js'
-  import { Search, X, Phone, Star, ChevronRight } from '@lucide/svelte'
+  import { Search, X, Phone,  ChevronRight } from '@lucide/svelte'
   import { page, navigating } from '$app/state'
   import { goto } from '$app/navigation'
   import { onDestroy } from 'svelte'
@@ -132,7 +132,6 @@
             <Table.Head>Телефон</Table.Head>
             <Table.Head>Місто</Table.Head>
             <Table.Head>Категорії</Table.Head>
-            <Table.Head class="text-right">Рейтинг</Table.Head>
             <Table.Head>Верифікація</Table.Head>
             <Table.Head class="w-10"></Table.Head>
           </Table.Row>
@@ -224,21 +223,6 @@
                   {:else}
                     <span class="text-muted-foreground">Немає</span>
                   {/if}
-                </Table.Cell>
-
-                <Table.Cell class="text-right tabular-nums">
-                  <span
-                    class="text-foreground inline-flex items-center justify-end gap-1"
-                  >
-                    <Star
-                      class="size-3.5 fill-amber-400 text-amber-400"
-                      aria-hidden="true"
-                    />
-                    {master.avgRatingAsMaster.toFixed(1)}
-                    <span class="text-muted-foreground"
-                      >({master.reviewsCountAsMaster})</span
-                    >
-                  </span>
                 </Table.Cell>
 
                 <Table.Cell>

@@ -1,24 +1,33 @@
-// src/lib/server/pusher.ts
 import Pusher from 'pusher'
-import { PUSHER_APP_ID, PUSHER_SECRET } from '$env/static/private'
-import { PUBLIC_PUSHER_KEY, PUBLIC_PUSHER_CLUSTER } from '$env/static/public'
+import { env } from '$env/dynamic/private'
 
-export const pusher = new Pusher({
-  appId: PUSHER_APP_ID,
-  key: PUBLIC_PUSHER_KEY,
-  secret: PUSHER_SECRET, // лишається на сервері
-  cluster: PUBLIC_PUSHER_CLUSTER,
+// УВАГА: ці значення мають збігатися з Pusher-додатком маркетплейсу,
+// інакше події звідти не дійдуть до CRM.
+export const pusherServer = new Pusher({
+  appId: env.PUSHER_APP_ID!,
+  key: env.PUSHER_KEY!,
+  secret: env.PUSHER_SECRET!,
+  cluster: env.PUSHER_CLUSTER ?? 'eu',
   useTLS: true,
 })
 
-export const STATS_CHANNEL = 'private-admin-stats'
-export const STATS_EVENT = 'stats:changed'
+export const ADMIN_CHANNEL = 'private-admin'
+export const MODERATION_NEW = 'moderation:new' // новий майстер → тост + бейдж
+export const MODERATION_CHANGED = 'moderation:changed' // рішення прийнято → лише бейдж
 
-// Лише сигнал «змінилось», без даних. Падіння Pusher не повинно ламати мутацію.
-export async function notifyStatsChanged(): Promise<void> {
+export async function safeTrigger(
+  channel: string | string[],
+  event: string,
+  data: unknown,
+): Promise<void> {
   try {
-    await pusher.trigger(STATS_CHANNEL, STATS_EVENT, { at: Date.now() })
+    await pusherServer.trigger(channel, event, data)
   } catch (err) {
-    console.error('pusher trigger failed', err)
+    console.error('[Pusher] trigger failed', { channel, event, err })
   }
 }
+
+export const notifyModerationNew = () =>
+  safeTrigger(ADMIN_CHANNEL, MODERATION_NEW, {})
+export const notifyModerationChanged = () =>
+  safeTrigger(ADMIN_CHANNEL, MODERATION_CHANGED, {})

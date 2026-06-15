@@ -13,15 +13,17 @@
     Star,
     ShieldUser,
     Settings,
-    ChartColumn,
   } from '@lucide/svelte'
   import * as Tooltip from '$lib/components/ui/tooltip/index.js'
   import * as Avatar from '$lib/components/ui/avatar/index.js'
 
   let {
     user,
-  }: { user: { name: string | null; email: string; image: string | null } } =
-    $props()
+    moderationPending = 0,
+  }: {
+    user: { name: string | null; email: string; image: string | null }
+    moderationPending?: number
+  } = $props()
 
   type NavItem = { href: string; label: string; icon: Component }
 
@@ -33,7 +35,7 @@
     { href: '/orders', label: 'Замовлення', icon: Package },
     { href: '/chats', label: 'Чати', icon: MessageCircle },
     { href: '/reviews', label: 'Відгуки', icon: Star },
-    { href: '/reviews', label: 'Адмін', icon: ShieldUser },
+    { href: '/admins', label: 'Адмін', icon: ShieldUser },
     { href: '/settings', label: 'Налаштування', icon: Settings },
   ]
 
@@ -53,6 +55,7 @@
 
 {#snippet navLink(item: NavItem)}
   {@const active = isActive(item.href)}
+  {@const badge = item.href === '/moderation' ? moderationPending : 0}
   <Tooltip.Root>
     <Tooltip.Trigger>
       {#snippet child({ props })}
@@ -60,7 +63,9 @@
           {...props}
           href={item.href}
           aria-current={active ? 'page' : undefined}
-          aria-label={item.label}
+          aria-label={badge > 0
+            ? `${item.label} — ${badge} на модерацію`
+            : item.label}
           class="nav-item group relative flex w-full flex-col items-center gap-1 rounded-xl py-2 outline-none focus-visible:ring-2 focus-visible:ring-[var(--sidebar-ring)] {active
             ? 'is-active'
             : ''}"
@@ -72,11 +77,23 @@
               strokeWidth={active ? 2 : 1.8}
               aria-hidden="true"
             />
+            {#if badge > 0}
+              <span
+                class="absolute -top-1.5 -right-2 z-20 flex h-[16px] min-w-[16px] items-center justify-center rounded-full bg-red-500 px-1 text-[10px] leading-none font-bold text-white ring-2 ring-[var(--sidebar)]"
+                aria-hidden="true"
+              >
+                {badge > 9 ? '9+' : badge}
+              </span>
+            {/if}
           </span>
         </a>
       {/snippet}
     </Tooltip.Trigger>
-    <Tooltip.Content side="right"><p>{item.label}</p></Tooltip.Content>
+    <Tooltip.Content side="right">
+      <p>
+        {item.label}{#if badge > 0}&nbsp;({badge}){/if}
+      </p>
+    </Tooltip.Content>
   </Tooltip.Root>
 {/snippet}
 
@@ -87,7 +104,6 @@
     class:w-14={!collapsed}
     class:w-12={collapsed}
   >
-    <!-- Профіль зверху замість стрілки -->
     <Tooltip.Root>
       <Tooltip.Trigger>
         {#snippet child({ props })}
@@ -120,12 +136,11 @@
     <div class="bg-sidebar-border my-2 h-px w-8"></div>
 
     <div class="flex w-full flex-col items-center gap-1 px-1.5">
-      {#each nav as item, i (i)}
+      {#each nav as item (item.label)}
         {@render navLink(item)}
       {/each}
     </div>
 
-    <!-- Колапс — тепер унизу -->
     <button
       type="button"
       onclick={() => (collapsed = !collapsed)}
