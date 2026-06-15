@@ -26,7 +26,7 @@
   const POS_CLASS: Record<ToastPosition, string> = {
     'top-left': 'top-15 left-4 items-start',
     'top-center': 'top-5 left-1/2 -translate-x-1/2 items-center',
-    'top-right': 'top-3 right-4 items-end',
+    'top-right': 'top-3 right-3 items-end',
     'bottom-left': 'bottom-4 left-4 items-start flex-col-reverse',
     'bottom-center':
       'bottom-4 left-1/2 -translate-x-1/2 items-center flex-col-reverse',
