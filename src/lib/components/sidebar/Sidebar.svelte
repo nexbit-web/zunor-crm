@@ -119,6 +119,7 @@
                 ? 'ring-2 ring-[var(--sidebar-ring)] ring-offset-2 ring-offset-[var(--sidebar)]'
                 : ''}"
             >
+            
               <Avatar.Image
                 src={user.image ?? ''}
                 alt={user.name ?? user.email}
