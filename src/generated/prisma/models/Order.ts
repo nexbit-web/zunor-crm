@@ -51,6 +51,9 @@ export type OrderMinAggregateOutputType = {
   chatId: string | null
   createdAt: Date | null
   updatedAt: Date | null
+  removedAt: Date | null
+  removedReason: string | null
+  removedById: string | null
 }
 
 export type OrderMaxAggregateOutputType = {
@@ -70,6 +73,9 @@ export type OrderMaxAggregateOutputType = {
   chatId: string | null
   createdAt: Date | null
   updatedAt: Date | null
+  removedAt: Date | null
+  removedReason: string | null
+  removedById: string | null
 }
 
 export type OrderCountAggregateOutputType = {
@@ -90,6 +96,9 @@ export type OrderCountAggregateOutputType = {
   chatId: number
   createdAt: number
   updatedAt: number
+  removedAt: number
+  removedReason: number
+  removedById: number
   _all: number
 }
 
@@ -119,6 +128,9 @@ export type OrderMinAggregateInputType = {
   chatId?: true
   createdAt?: true
   updatedAt?: true
+  removedAt?: true
+  removedReason?: true
+  removedById?: true
 }
 
 export type OrderMaxAggregateInputType = {
@@ -138,6 +150,9 @@ export type OrderMaxAggregateInputType = {
   chatId?: true
   createdAt?: true
   updatedAt?: true
+  removedAt?: true
+  removedReason?: true
+  removedById?: true
 }
 
 export type OrderCountAggregateInputType = {
@@ -158,6 +173,9 @@ export type OrderCountAggregateInputType = {
   chatId?: true
   createdAt?: true
   updatedAt?: true
+  removedAt?: true
+  removedReason?: true
+  removedById?: true
   _all?: true
 }
 
@@ -265,6 +283,9 @@ export type OrderGroupByOutputType = {
   chatId: string | null
   createdAt: Date
   updatedAt: Date
+  removedAt: Date | null
+  removedReason: string | null
+  removedById: string | null
   _count: OrderCountAggregateOutputType | null
   _avg: OrderAvgAggregateOutputType | null
   _sum: OrderSumAggregateOutputType | null
@@ -308,6 +329,9 @@ export type OrderWhereInput = {
   chatId?: Prisma.StringNullableFilter<"Order"> | string | null
   createdAt?: Prisma.DateTimeFilter<"Order"> | Date | string
   updatedAt?: Prisma.DateTimeFilter<"Order"> | Date | string
+  removedAt?: Prisma.DateTimeNullableFilter<"Order"> | Date | string | null
+  removedReason?: Prisma.StringNullableFilter<"Order"> | string | null
+  removedById?: Prisma.StringNullableFilter<"Order"> | string | null
   client?: Prisma.XOR<Prisma.UserScalarRelationFilter, Prisma.UserWhereInput>
   master?: Prisma.XOR<Prisma.UserScalarRelationFilter, Prisma.UserWhereInput>
   chat?: Prisma.XOR<Prisma.ChatNullableScalarRelationFilter, Prisma.ChatWhereInput> | null
@@ -334,6 +358,9 @@ export type OrderOrderByWithRelationInput = {
   chatId?: Prisma.SortOrderInput | Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
+  removedAt?: Prisma.SortOrderInput | Prisma.SortOrder
+  removedReason?: Prisma.SortOrderInput | Prisma.SortOrder
+  removedById?: Prisma.SortOrderInput | Prisma.SortOrder
   client?: Prisma.UserOrderByWithRelationInput
   master?: Prisma.UserOrderByWithRelationInput
   chat?: Prisma.ChatOrderByWithRelationInput
@@ -363,6 +390,9 @@ export type OrderWhereUniqueInput = Prisma.AtLeast<{
   cancelReason?: Prisma.StringNullableFilter<"Order"> | string | null
   createdAt?: Prisma.DateTimeFilter<"Order"> | Date | string
   updatedAt?: Prisma.DateTimeFilter<"Order"> | Date | string
+  removedAt?: Prisma.DateTimeNullableFilter<"Order"> | Date | string | null
+  removedReason?: Prisma.StringNullableFilter<"Order"> | string | null
+  removedById?: Prisma.StringNullableFilter<"Order"> | string | null
   client?: Prisma.XOR<Prisma.UserScalarRelationFilter, Prisma.UserWhereInput>
   master?: Prisma.XOR<Prisma.UserScalarRelationFilter, Prisma.UserWhereInput>
   chat?: Prisma.XOR<Prisma.ChatNullableScalarRelationFilter, Prisma.ChatWhereInput> | null
@@ -389,6 +419,9 @@ export type OrderOrderByWithAggregationInput = {
   chatId?: Prisma.SortOrderInput | Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
+  removedAt?: Prisma.SortOrderInput | Prisma.SortOrder
+  removedReason?: Prisma.SortOrderInput | Prisma.SortOrder
+  removedById?: Prisma.SortOrderInput | Prisma.SortOrder
   _count?: Prisma.OrderCountOrderByAggregateInput
   _avg?: Prisma.OrderAvgOrderByAggregateInput
   _max?: Prisma.OrderMaxOrderByAggregateInput
@@ -417,6 +450,9 @@ export type OrderScalarWhereWithAggregatesInput = {
   chatId?: Prisma.StringNullableWithAggregatesFilter<"Order"> | string | null
   createdAt?: Prisma.DateTimeWithAggregatesFilter<"Order"> | Date | string
   updatedAt?: Prisma.DateTimeWithAggregatesFilter<"Order"> | Date | string
+  removedAt?: Prisma.DateTimeNullableWithAggregatesFilter<"Order"> | Date | string | null
+  removedReason?: Prisma.StringNullableWithAggregatesFilter<"Order"> | string | null
+  removedById?: Prisma.StringNullableWithAggregatesFilter<"Order"> | string | null
 }
 
 export type OrderCreateInput = {
@@ -434,6 +470,9 @@ export type OrderCreateInput = {
   cancelReason?: string | null
   createdAt?: Date | string
   updatedAt?: Date | string
+  removedAt?: Date | string | null
+  removedReason?: string | null
+  removedById?: string | null
   client: Prisma.UserCreateNestedOneWithoutClientOrdersInput
   master: Prisma.UserCreateNestedOneWithoutMasterOrdersInput
   chat?: Prisma.ChatCreateNestedOneWithoutOrderInput
@@ -460,6 +499,9 @@ export type OrderUncheckedCreateInput = {
   chatId?: string | null
   createdAt?: Date | string
   updatedAt?: Date | string
+  removedAt?: Date | string | null
+  removedReason?: string | null
+  removedById?: string | null
   fromJob?: Prisma.JobUncheckedCreateNestedOneWithoutSelectedOrderInput
   reviews?: Prisma.ReviewUncheckedCreateNestedManyWithoutOrderInput
   events?: Prisma.OrderEventUncheckedCreateNestedManyWithoutOrderInput
@@ -480,6 +522,9 @@ export type OrderUpdateInput = {
   cancelReason?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  removedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  removedReason?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  removedById?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   client?: Prisma.UserUpdateOneRequiredWithoutClientOrdersNestedInput
   master?: Prisma.UserUpdateOneRequiredWithoutMasterOrdersNestedInput
   chat?: Prisma.ChatUpdateOneWithoutOrderNestedInput
@@ -506,6 +551,9 @@ export type OrderUncheckedUpdateInput = {
   chatId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  removedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  removedReason?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  removedById?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   fromJob?: Prisma.JobUncheckedUpdateOneWithoutSelectedOrderNestedInput
   reviews?: Prisma.ReviewUncheckedUpdateManyWithoutOrderNestedInput
   events?: Prisma.OrderEventUncheckedUpdateManyWithoutOrderNestedInput
@@ -529,6 +577,9 @@ export type OrderCreateManyInput = {
   chatId?: string | null
   createdAt?: Date | string
   updatedAt?: Date | string
+  removedAt?: Date | string | null
+  removedReason?: string | null
+  removedById?: string | null
 }
 
 export type OrderUpdateManyMutationInput = {
@@ -546,6 +597,9 @@ export type OrderUpdateManyMutationInput = {
   cancelReason?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  removedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  removedReason?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  removedById?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
 }
 
 export type OrderUncheckedUpdateManyInput = {
@@ -566,6 +620,9 @@ export type OrderUncheckedUpdateManyInput = {
   chatId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  removedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  removedReason?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  removedById?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
 }
 
 export type OrderListRelationFilter = {
@@ -601,6 +658,9 @@ export type OrderCountOrderByAggregateInput = {
   chatId?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
+  removedAt?: Prisma.SortOrder
+  removedReason?: Prisma.SortOrder
+  removedById?: Prisma.SortOrder
 }
 
 export type OrderAvgOrderByAggregateInput = {
@@ -624,6 +684,9 @@ export type OrderMaxOrderByAggregateInput = {
   chatId?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
+  removedAt?: Prisma.SortOrder
+  removedReason?: Prisma.SortOrder
+  removedById?: Prisma.SortOrder
 }
 
 export type OrderMinOrderByAggregateInput = {
@@ -643,6 +706,9 @@ export type OrderMinOrderByAggregateInput = {
   chatId?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
+  removedAt?: Prisma.SortOrder
+  removedReason?: Prisma.SortOrder
+  removedById?: Prisma.SortOrder
 }
 
 export type OrderSumOrderByAggregateInput = {
@@ -833,6 +899,9 @@ export type OrderCreateWithoutClientInput = {
   cancelReason?: string | null
   createdAt?: Date | string
   updatedAt?: Date | string
+  removedAt?: Date | string | null
+  removedReason?: string | null
+  removedById?: string | null
   master: Prisma.UserCreateNestedOneWithoutMasterOrdersInput
   chat?: Prisma.ChatCreateNestedOneWithoutOrderInput
   fromJob?: Prisma.JobCreateNestedOneWithoutSelectedOrderInput
@@ -857,6 +926,9 @@ export type OrderUncheckedCreateWithoutClientInput = {
   chatId?: string | null
   createdAt?: Date | string
   updatedAt?: Date | string
+  removedAt?: Date | string | null
+  removedReason?: string | null
+  removedById?: string | null
   fromJob?: Prisma.JobUncheckedCreateNestedOneWithoutSelectedOrderInput
   reviews?: Prisma.ReviewUncheckedCreateNestedManyWithoutOrderInput
   events?: Prisma.OrderEventUncheckedCreateNestedManyWithoutOrderInput
@@ -887,6 +959,9 @@ export type OrderCreateWithoutMasterInput = {
   cancelReason?: string | null
   createdAt?: Date | string
   updatedAt?: Date | string
+  removedAt?: Date | string | null
+  removedReason?: string | null
+  removedById?: string | null
   client: Prisma.UserCreateNestedOneWithoutClientOrdersInput
   chat?: Prisma.ChatCreateNestedOneWithoutOrderInput
   fromJob?: Prisma.JobCreateNestedOneWithoutSelectedOrderInput
@@ -911,6 +986,9 @@ export type OrderUncheckedCreateWithoutMasterInput = {
   chatId?: string | null
   createdAt?: Date | string
   updatedAt?: Date | string
+  removedAt?: Date | string | null
+  removedReason?: string | null
+  removedById?: string | null
   fromJob?: Prisma.JobUncheckedCreateNestedOneWithoutSelectedOrderInput
   reviews?: Prisma.ReviewUncheckedCreateNestedManyWithoutOrderInput
   events?: Prisma.OrderEventUncheckedCreateNestedManyWithoutOrderInput
@@ -963,6 +1041,9 @@ export type OrderScalarWhereInput = {
   chatId?: Prisma.StringNullableFilter<"Order"> | string | null
   createdAt?: Prisma.DateTimeFilter<"Order"> | Date | string
   updatedAt?: Prisma.DateTimeFilter<"Order"> | Date | string
+  removedAt?: Prisma.DateTimeNullableFilter<"Order"> | Date | string | null
+  removedReason?: Prisma.StringNullableFilter<"Order"> | string | null
+  removedById?: Prisma.StringNullableFilter<"Order"> | string | null
 }
 
 export type OrderUpsertWithWhereUniqueWithoutMasterInput = {
@@ -996,6 +1077,9 @@ export type OrderCreateWithoutFromJobInput = {
   cancelReason?: string | null
   createdAt?: Date | string
   updatedAt?: Date | string
+  removedAt?: Date | string | null
+  removedReason?: string | null
+  removedById?: string | null
   client: Prisma.UserCreateNestedOneWithoutClientOrdersInput
   master: Prisma.UserCreateNestedOneWithoutMasterOrdersInput
   chat?: Prisma.ChatCreateNestedOneWithoutOrderInput
@@ -1021,6 +1105,9 @@ export type OrderUncheckedCreateWithoutFromJobInput = {
   chatId?: string | null
   createdAt?: Date | string
   updatedAt?: Date | string
+  removedAt?: Date | string | null
+  removedReason?: string | null
+  removedById?: string | null
   reviews?: Prisma.ReviewUncheckedCreateNestedManyWithoutOrderInput
   events?: Prisma.OrderEventUncheckedCreateNestedManyWithoutOrderInput
 }
@@ -1056,6 +1143,9 @@ export type OrderUpdateWithoutFromJobInput = {
   cancelReason?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  removedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  removedReason?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  removedById?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   client?: Prisma.UserUpdateOneRequiredWithoutClientOrdersNestedInput
   master?: Prisma.UserUpdateOneRequiredWithoutMasterOrdersNestedInput
   chat?: Prisma.ChatUpdateOneWithoutOrderNestedInput
@@ -1081,6 +1171,9 @@ export type OrderUncheckedUpdateWithoutFromJobInput = {
   chatId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  removedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  removedReason?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  removedById?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   reviews?: Prisma.ReviewUncheckedUpdateManyWithoutOrderNestedInput
   events?: Prisma.OrderEventUncheckedUpdateManyWithoutOrderNestedInput
 }
@@ -1100,6 +1193,9 @@ export type OrderCreateWithoutEventsInput = {
   cancelReason?: string | null
   createdAt?: Date | string
   updatedAt?: Date | string
+  removedAt?: Date | string | null
+  removedReason?: string | null
+  removedById?: string | null
   client: Prisma.UserCreateNestedOneWithoutClientOrdersInput
   master: Prisma.UserCreateNestedOneWithoutMasterOrdersInput
   chat?: Prisma.ChatCreateNestedOneWithoutOrderInput
@@ -1125,6 +1221,9 @@ export type OrderUncheckedCreateWithoutEventsInput = {
   chatId?: string | null
   createdAt?: Date | string
   updatedAt?: Date | string
+  removedAt?: Date | string | null
+  removedReason?: string | null
+  removedById?: string | null
   fromJob?: Prisma.JobUncheckedCreateNestedOneWithoutSelectedOrderInput
   reviews?: Prisma.ReviewUncheckedCreateNestedManyWithoutOrderInput
 }
@@ -1160,6 +1259,9 @@ export type OrderUpdateWithoutEventsInput = {
   cancelReason?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  removedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  removedReason?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  removedById?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   client?: Prisma.UserUpdateOneRequiredWithoutClientOrdersNestedInput
   master?: Prisma.UserUpdateOneRequiredWithoutMasterOrdersNestedInput
   chat?: Prisma.ChatUpdateOneWithoutOrderNestedInput
@@ -1185,6 +1287,9 @@ export type OrderUncheckedUpdateWithoutEventsInput = {
   chatId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  removedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  removedReason?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  removedById?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   fromJob?: Prisma.JobUncheckedUpdateOneWithoutSelectedOrderNestedInput
   reviews?: Prisma.ReviewUncheckedUpdateManyWithoutOrderNestedInput
 }
@@ -1204,6 +1309,9 @@ export type OrderCreateWithoutChatInput = {
   cancelReason?: string | null
   createdAt?: Date | string
   updatedAt?: Date | string
+  removedAt?: Date | string | null
+  removedReason?: string | null
+  removedById?: string | null
   client: Prisma.UserCreateNestedOneWithoutClientOrdersInput
   master: Prisma.UserCreateNestedOneWithoutMasterOrdersInput
   fromJob?: Prisma.JobCreateNestedOneWithoutSelectedOrderInput
@@ -1228,6 +1336,9 @@ export type OrderUncheckedCreateWithoutChatInput = {
   cancelReason?: string | null
   createdAt?: Date | string
   updatedAt?: Date | string
+  removedAt?: Date | string | null
+  removedReason?: string | null
+  removedById?: string | null
   fromJob?: Prisma.JobUncheckedCreateNestedOneWithoutSelectedOrderInput
   reviews?: Prisma.ReviewUncheckedCreateNestedManyWithoutOrderInput
   events?: Prisma.OrderEventUncheckedCreateNestedManyWithoutOrderInput
@@ -1264,6 +1375,9 @@ export type OrderUpdateWithoutChatInput = {
   cancelReason?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  removedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  removedReason?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  removedById?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   client?: Prisma.UserUpdateOneRequiredWithoutClientOrdersNestedInput
   master?: Prisma.UserUpdateOneRequiredWithoutMasterOrdersNestedInput
   fromJob?: Prisma.JobUpdateOneWithoutSelectedOrderNestedInput
@@ -1288,6 +1402,9 @@ export type OrderUncheckedUpdateWithoutChatInput = {
   cancelReason?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  removedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  removedReason?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  removedById?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   fromJob?: Prisma.JobUncheckedUpdateOneWithoutSelectedOrderNestedInput
   reviews?: Prisma.ReviewUncheckedUpdateManyWithoutOrderNestedInput
   events?: Prisma.OrderEventUncheckedUpdateManyWithoutOrderNestedInput
@@ -1308,6 +1425,9 @@ export type OrderCreateWithoutReviewsInput = {
   cancelReason?: string | null
   createdAt?: Date | string
   updatedAt?: Date | string
+  removedAt?: Date | string | null
+  removedReason?: string | null
+  removedById?: string | null
   client: Prisma.UserCreateNestedOneWithoutClientOrdersInput
   master: Prisma.UserCreateNestedOneWithoutMasterOrdersInput
   chat?: Prisma.ChatCreateNestedOneWithoutOrderInput
@@ -1333,6 +1453,9 @@ export type OrderUncheckedCreateWithoutReviewsInput = {
   chatId?: string | null
   createdAt?: Date | string
   updatedAt?: Date | string
+  removedAt?: Date | string | null
+  removedReason?: string | null
+  removedById?: string | null
   fromJob?: Prisma.JobUncheckedCreateNestedOneWithoutSelectedOrderInput
   events?: Prisma.OrderEventUncheckedCreateNestedManyWithoutOrderInput
 }
@@ -1368,6 +1491,9 @@ export type OrderUpdateWithoutReviewsInput = {
   cancelReason?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  removedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  removedReason?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  removedById?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   client?: Prisma.UserUpdateOneRequiredWithoutClientOrdersNestedInput
   master?: Prisma.UserUpdateOneRequiredWithoutMasterOrdersNestedInput
   chat?: Prisma.ChatUpdateOneWithoutOrderNestedInput
@@ -1393,6 +1519,9 @@ export type OrderUncheckedUpdateWithoutReviewsInput = {
   chatId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  removedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  removedReason?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  removedById?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   fromJob?: Prisma.JobUncheckedUpdateOneWithoutSelectedOrderNestedInput
   events?: Prisma.OrderEventUncheckedUpdateManyWithoutOrderNestedInput
 }
@@ -1414,6 +1543,9 @@ export type OrderCreateManyClientInput = {
   chatId?: string | null
   createdAt?: Date | string
   updatedAt?: Date | string
+  removedAt?: Date | string | null
+  removedReason?: string | null
+  removedById?: string | null
 }
 
 export type OrderCreateManyMasterInput = {
@@ -1433,6 +1565,9 @@ export type OrderCreateManyMasterInput = {
   chatId?: string | null
   createdAt?: Date | string
   updatedAt?: Date | string
+  removedAt?: Date | string | null
+  removedReason?: string | null
+  removedById?: string | null
 }
 
 export type OrderUpdateWithoutClientInput = {
@@ -1450,6 +1585,9 @@ export type OrderUpdateWithoutClientInput = {
   cancelReason?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  removedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  removedReason?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  removedById?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   master?: Prisma.UserUpdateOneRequiredWithoutMasterOrdersNestedInput
   chat?: Prisma.ChatUpdateOneWithoutOrderNestedInput
   fromJob?: Prisma.JobUpdateOneWithoutSelectedOrderNestedInput
@@ -1474,6 +1612,9 @@ export type OrderUncheckedUpdateWithoutClientInput = {
   chatId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  removedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  removedReason?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  removedById?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   fromJob?: Prisma.JobUncheckedUpdateOneWithoutSelectedOrderNestedInput
   reviews?: Prisma.ReviewUncheckedUpdateManyWithoutOrderNestedInput
   events?: Prisma.OrderEventUncheckedUpdateManyWithoutOrderNestedInput
@@ -1496,6 +1637,9 @@ export type OrderUncheckedUpdateManyWithoutClientInput = {
   chatId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  removedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  removedReason?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  removedById?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
 }
 
 export type OrderUpdateWithoutMasterInput = {
@@ -1513,6 +1657,9 @@ export type OrderUpdateWithoutMasterInput = {
   cancelReason?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  removedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  removedReason?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  removedById?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   client?: Prisma.UserUpdateOneRequiredWithoutClientOrdersNestedInput
   chat?: Prisma.ChatUpdateOneWithoutOrderNestedInput
   fromJob?: Prisma.JobUpdateOneWithoutSelectedOrderNestedInput
@@ -1537,6 +1684,9 @@ export type OrderUncheckedUpdateWithoutMasterInput = {
   chatId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  removedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  removedReason?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  removedById?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   fromJob?: Prisma.JobUncheckedUpdateOneWithoutSelectedOrderNestedInput
   reviews?: Prisma.ReviewUncheckedUpdateManyWithoutOrderNestedInput
   events?: Prisma.OrderEventUncheckedUpdateManyWithoutOrderNestedInput
@@ -1559,6 +1709,9 @@ export type OrderUncheckedUpdateManyWithoutMasterInput = {
   chatId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  removedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  removedReason?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  removedById?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
 }
 
 
@@ -1619,6 +1772,9 @@ export type OrderSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = 
   chatId?: boolean
   createdAt?: boolean
   updatedAt?: boolean
+  removedAt?: boolean
+  removedReason?: boolean
+  removedById?: boolean
   client?: boolean | Prisma.UserDefaultArgs<ExtArgs>
   master?: boolean | Prisma.UserDefaultArgs<ExtArgs>
   chat?: boolean | Prisma.Order$chatArgs<ExtArgs>
@@ -1646,6 +1802,9 @@ export type OrderSelectCreateManyAndReturn<ExtArgs extends runtime.Types.Extensi
   chatId?: boolean
   createdAt?: boolean
   updatedAt?: boolean
+  removedAt?: boolean
+  removedReason?: boolean
+  removedById?: boolean
   client?: boolean | Prisma.UserDefaultArgs<ExtArgs>
   master?: boolean | Prisma.UserDefaultArgs<ExtArgs>
   chat?: boolean | Prisma.Order$chatArgs<ExtArgs>
@@ -1669,6 +1828,9 @@ export type OrderSelectUpdateManyAndReturn<ExtArgs extends runtime.Types.Extensi
   chatId?: boolean
   createdAt?: boolean
   updatedAt?: boolean
+  removedAt?: boolean
+  removedReason?: boolean
+  removedById?: boolean
   client?: boolean | Prisma.UserDefaultArgs<ExtArgs>
   master?: boolean | Prisma.UserDefaultArgs<ExtArgs>
   chat?: boolean | Prisma.Order$chatArgs<ExtArgs>
@@ -1692,9 +1854,12 @@ export type OrderSelectScalar = {
   chatId?: boolean
   createdAt?: boolean
   updatedAt?: boolean
+  removedAt?: boolean
+  removedReason?: boolean
+  removedById?: boolean
 }
 
-export type OrderOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "clientId" | "masterId" | "title" | "description" | "metadata" | "priceCents" | "currency" | "status" | "startedAt" | "completedAt" | "cancelledAt" | "cancelledById" | "cancelReason" | "chatId" | "createdAt" | "updatedAt", ExtArgs["result"]["order"]>
+export type OrderOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "clientId" | "masterId" | "title" | "description" | "metadata" | "priceCents" | "currency" | "status" | "startedAt" | "completedAt" | "cancelledAt" | "cancelledById" | "cancelReason" | "chatId" | "createdAt" | "updatedAt" | "removedAt" | "removedReason" | "removedById", ExtArgs["result"]["order"]>
 export type OrderInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   client?: boolean | Prisma.UserDefaultArgs<ExtArgs>
   master?: boolean | Prisma.UserDefaultArgs<ExtArgs>
@@ -1743,6 +1908,9 @@ export type $OrderPayload<ExtArgs extends runtime.Types.Extensions.InternalArgs 
     chatId: string | null
     createdAt: Date
     updatedAt: Date
+    removedAt: Date | null
+    removedReason: string | null
+    removedById: string | null
   }, ExtArgs["result"]["order"]>
   composites: {}
 }
@@ -2189,6 +2357,9 @@ export interface OrderFieldRefs {
   readonly chatId: Prisma.FieldRef<"Order", 'String'>
   readonly createdAt: Prisma.FieldRef<"Order", 'DateTime'>
   readonly updatedAt: Prisma.FieldRef<"Order", 'DateTime'>
+  readonly removedAt: Prisma.FieldRef<"Order", 'DateTime'>
+  readonly removedReason: Prisma.FieldRef<"Order", 'String'>
+  readonly removedById: Prisma.FieldRef<"Order", 'String'>
 }
     
 

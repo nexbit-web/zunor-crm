@@ -4,19 +4,20 @@ import { svelteKitHandler } from 'better-auth/svelte-kit'
 import { building } from '$app/environment'
 import { redirect, type Handle } from '@sveltejs/kit'
 import { auth } from '$lib/server/auth'
+import { isStaff } from '$lib/permissions'
 
-// Доступне без ADMIN-сесії. Усе інше — за гейтом.
+// Доступне без staff-сесії. Усе інше — за гейтом.
 const PUBLIC_PATHS = ['/login']
 const isPublic = (p: string) =>
   PUBLIC_PATHS.some((x) => p === x || p.startsWith(x + '/'))
 
-// 1) Security-заголовки на КОЖНУ відповідь, включно з ендпоінтами Better Auth.
+// 1) Security-заголовки на КОЖНУ відповідь (включно з ендпоінтами Better Auth).
 const securityHeaders: Handle = async ({ event, resolve }) => {
   const response = await resolve(event)
 
   const csp = [
     "default-src 'self'",
-    "script-src 'self' 'unsafe-inline'", // ← вот и всё
+    "script-src 'self' 'unsafe-inline'",
     "style-src 'self' 'unsafe-inline'",
     "img-src 'self' data: https:",
     "font-src 'self'",
@@ -45,33 +46,39 @@ const securityHeaders: Handle = async ({ event, resolve }) => {
   return response
 }
 
-// 2) Резолвимо сесію один раз, кладемо в locals, монтуємо Better Auth.
+// 2) Сесія один раз → locals; монтуємо Better Auth (/api/auth/*).
 const populateSession: Handle = async ({ event, resolve }) => {
   const session = await auth.api.getSession({ headers: event.request.headers })
   event.locals.session = session?.session ?? null
   event.locals.user = session?.user ?? null
-  // svelteKitHandler сам віддає /api/auth/*, інакше падає у resolve (→ requireAdmin).
+  // svelteKitHandler сам віддає /api/auth/*, інакше викликає resolve → наступний гейт.
   return svelteKitHandler({ event, resolve, auth, building })
 }
 
-// 3) Уся CRM — ADMIN-only. CLIENT/MASTER з маркетплейсу сюди не заходять.
-const requireAdmin: Handle = async ({ event, resolve }) => {
+// 3) CRM — лише staff (ADMIN/MANAGER/MODERATOR); бан і не-staff → на /login.
+//    Права на конкретні дії перевіряються у load/actions через requireCapability.
+const requireStaffGate: Handle = async ({ event, resolve }) => {
   const { pathname } = event.url
-  if (pathname.startsWith('/api/auth') || isPublic(pathname))
+  if (pathname.startsWith('/api/auth') || isPublic(pathname)) {
     return resolve(event)
+  }
 
   const user = event.locals.user
   if (!user) {
-    throw redirect(
-      // ← throw!
+    redirect(
       303,
       `/login?redirectTo=${encodeURIComponent(pathname + event.url.search)}`,
     )
   }
-  if (user.role !== 'ADMIN') {
-    throw redirect(303, '/login?error=forbidden') // ← throw!
+  if (!isStaff(user.role) || user.banned) {
+    redirect(303, '/login?error=forbidden')
   }
+
   return resolve(event)
 }
 
-export const handle = sequence(securityHeaders, populateSession, requireAdmin)
+export const handle = sequence(
+  securityHeaders,
+  populateSession,
+  requireStaffGate,
+)

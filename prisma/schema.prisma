@@ -15,6 +15,8 @@ enum Role {
   CLIENT
   MASTER
   ADMIN
+  MANAGER
+  MODERATOR
 }
 
 enum VerificationStatus {
@@ -107,6 +109,10 @@ model User {
   accounts        Account[]
   notifications   Notification[]
   orderEvents     OrderEvent[]
+
+  banned     Boolean   @default(false)
+  banReason  String?
+  banExpires DateTime?
 
   @@index([username])
   @@index([role, city])
@@ -265,6 +271,11 @@ model Order {
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 
+  removedAt     DateTime?
+  removedReason String?
+  removedById   String?
+  
+  @@index([removedAt])
   @@index([clientId, status])
   @@index([masterId, status])
   @@index([status, createdAt])
@@ -454,6 +465,7 @@ model Session {
   userAgent String?
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
+  impersonatedBy String?
 }
 
 model Account {

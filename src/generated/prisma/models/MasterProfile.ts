@@ -629,10 +629,6 @@ export type EnumVerificationStatusFieldUpdateOperationsInput = {
   set?: $Enums.VerificationStatus
 }
 
-export type NullableDateTimeFieldUpdateOperationsInput = {
-  set?: Date | string | null
-}
-
 export type MasterProfileCreateWithoutUserInput = {
   id?: string
   categories?: Prisma.MasterProfileCreatecategoriesInput | string[]

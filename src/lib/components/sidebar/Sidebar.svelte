@@ -16,28 +16,44 @@
   } from '@lucide/svelte'
   import * as Tooltip from '$lib/components/ui/tooltip/index.js'
   import * as Avatar from '$lib/components/ui/avatar/index.js'
+  import { atLeast, type Role } from '$lib/permissions'
 
   let {
     user,
     moderationPending = 0,
   }: {
-    user: { name: string | null; email: string; image: string | null }
+    user: {
+      name: string | null
+      email: string
+      image: string | null
+      role: string
+    }
     moderationPending?: number
   } = $props()
 
-  type NavItem = { href: string; label: string; icon: Component }
+  // cap — право, потрібне щоб бачити пункт. Без cap → видно всім staff.
+  type NavItem = { href: string; label: string; icon: Component; min?: Role }
 
   const nav: NavItem[] = [
-    { href: '/statistics', label: 'Статистика', icon: LayoutDashboard },
+    {
+      href: '/statistics',
+      label: 'Статистика',
+      icon: LayoutDashboard,
+      min: 'MANAGER',
+    },
     { href: '/clients', label: 'Клієнти', icon: ContactRound },
     { href: '/masters', label: 'Майстри', icon: UsersRound },
     { href: '/moderation', label: 'Модерація', icon: ShieldCheck },
     { href: '/orders', label: 'Замовлення', icon: Package },
-    { href: '/chats', label: 'Чати', icon: MessageCircle },
+    // { href: '/chats', label: 'Чати', icon: MessageCircle },
     { href: '/reviews', label: 'Відгуки', icon: Star },
-    { href: '/admins', label: 'Адмін', icon: ShieldUser },
+    { href: '/admins', label: 'Адмін', icon: ShieldUser, min: 'ADMIN' },
     { href: '/settings', label: 'Налаштування', icon: Settings },
   ]
+  // Видимі пункти за роллю користувача
+  const visibleNav = $derived(
+    nav.filter((i) => atLeast(user.role, i.min ?? 'MODERATOR')),
+  )
 
   let collapsed = $state(false)
   const pathname = $derived(page.url.pathname)
@@ -66,7 +82,7 @@
           aria-label={badge > 0
             ? `${item.label} — ${badge} на модерацію`
             : item.label}
-          class="nav-item group relative flex w-full flex-col items-center gap-1 rounded-xl py-2 outline-none focus-visible:ring-2 focus-visible:ring-[var(--sidebar-ring)] {active
+          class="nav-item group relative flex w-full flex-col items-center gap-1 rounded-xl py-2 outline-none focus-visible:ring-2 focus-visible:ring-white/40 {active
             ? 'is-active'
             : ''}"
         >
@@ -79,7 +95,7 @@
             />
             {#if badge > 0}
               <span
-                class="absolute -top-1.5 -right-2 z-20 flex h-[16px] min-w-[16px] items-center justify-center rounded-full bg-red-500 px-1 text-[10px] leading-none font-bold text-white ring-2 ring-[var(--sidebar)]"
+                class="absolute -top-1.5 -right-2 z-20 flex h-[16px] min-w-[16px] items-center justify-center rounded-full bg-red-500 px-1 text-[10px] leading-none font-bold text-white ring-2 ring-[#0f0f12]"
                 aria-hidden="true"
               >
                 {badge > 9 ? '9+' : badge}
@@ -100,7 +116,7 @@
 <Tooltip.Provider delayDuration={200}>
   <nav
     aria-label="Навігація CRM"
-    class="sidebar bg-sidebar text-sidebar-foreground flex h-full shrink-0 flex-col items-center rounded-2xl py-3 transition-[width] duration-200 ease-out"
+    class="sidebar flex h-full shrink-0 flex-col items-center rounded-2xl py-3 transition-[width] duration-200 ease-out"
     class:w-14={!collapsed}
     class:w-12={collapsed}
   >
@@ -112,19 +128,18 @@
             href="/profile"
             aria-current={profileActive ? 'page' : undefined}
             aria-label="Профіль"
-            class="flex w-full items-center justify-center rounded-xl py-1 outline-none focus-visible:ring-2 focus-visible:ring-[var(--sidebar-ring)]"
+            class="flex w-full items-center justify-center rounded-xl py-1 outline-none focus-visible:ring-2 focus-visible:ring-white/40"
           >
             <Avatar.Root
               class="size-8 transition-shadow {profileActive
-                ? 'ring-2 ring-[var(--sidebar-ring)] ring-offset-2 ring-offset-[var(--sidebar)]'
+                ? 'ring-2 ring-white/40 ring-offset-2 ring-offset-[#0f0f12]'
                 : ''}"
             >
-            
               <Avatar.Image
                 src={user.image ?? ''}
                 alt={user.name ?? user.email}
               />
-              <Avatar.Fallback class="text-xs"
+              <Avatar.Fallback class="bg-white/10 text-xs text-white"
                 >{initials(user.name, user.email)}</Avatar.Fallback
               >
             </Avatar.Root>
@@ -134,10 +149,10 @@
       <Tooltip.Content side="right"><p>Профіль</p></Tooltip.Content>
     </Tooltip.Root>
 
-    <div class="bg-sidebar-border my-2 h-px w-8"></div>
+    <div class="my-2 h-px w-8 bg-white/10"></div>
 
     <div class="flex w-full flex-col items-center gap-1 px-1.5">
-      {#each nav as item (item.label)}
+      {#each visibleNav as item (item.href)}
         {@render navLink(item)}
       {/each}
     </div>
@@ -147,7 +162,7 @@
       onclick={() => (collapsed = !collapsed)}
       aria-label={collapsed ? 'Розгорнути меню' : 'Згорнути меню'}
       aria-expanded={!collapsed}
-      class="text-sidebar-foreground/70 hover:text-sidebar-foreground mt-auto flex size-9 cursor-pointer items-center justify-center rounded-xl outline-none transition-colors focus-visible:ring-2 focus-visible:ring-[var(--sidebar-ring)]"
+      class="mt-auto flex size-9 cursor-pointer items-center justify-center rounded-xl text-white/60 outline-none transition-colors hover:text-white focus-visible:ring-2 focus-visible:ring-white/40"
     >
       <ChevronsRight
         size={18}
@@ -161,7 +176,10 @@
 </Tooltip.Provider>
 
 <style>
+  /* Сайдбар завжди темний — фіксований колір, незалежно від теми */
   .sidebar {
+    background-color: #0f0f12;
+    color: #e8e8ec;
     --glow-from: #b5179e;
     --glow-via: #7209b7;
     --glow-to: #4cc9f0;

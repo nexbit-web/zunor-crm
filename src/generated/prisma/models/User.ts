@@ -60,6 +60,9 @@ export type UserMinAggregateOutputType = {
   lastSeen: Date | null
   createdAt: Date | null
   updatedAt: Date | null
+  banned: boolean | null
+  banReason: string | null
+  banExpires: Date | null
 }
 
 export type UserMaxAggregateOutputType = {
@@ -82,6 +85,9 @@ export type UserMaxAggregateOutputType = {
   lastSeen: Date | null
   createdAt: Date | null
   updatedAt: Date | null
+  banned: boolean | null
+  banReason: string | null
+  banExpires: Date | null
 }
 
 export type UserCountAggregateOutputType = {
@@ -104,6 +110,9 @@ export type UserCountAggregateOutputType = {
   lastSeen: number
   createdAt: number
   updatedAt: number
+  banned: number
+  banReason: number
+  banExpires: number
   _all: number
 }
 
@@ -142,6 +151,9 @@ export type UserMinAggregateInputType = {
   lastSeen?: true
   createdAt?: true
   updatedAt?: true
+  banned?: true
+  banReason?: true
+  banExpires?: true
 }
 
 export type UserMaxAggregateInputType = {
@@ -164,6 +176,9 @@ export type UserMaxAggregateInputType = {
   lastSeen?: true
   createdAt?: true
   updatedAt?: true
+  banned?: true
+  banReason?: true
+  banExpires?: true
 }
 
 export type UserCountAggregateInputType = {
@@ -186,6 +201,9 @@ export type UserCountAggregateInputType = {
   lastSeen?: true
   createdAt?: true
   updatedAt?: true
+  banned?: true
+  banReason?: true
+  banExpires?: true
   _all?: true
 }
 
@@ -295,6 +313,9 @@ export type UserGroupByOutputType = {
   lastSeen: Date
   createdAt: Date
   updatedAt: Date
+  banned: boolean
+  banReason: string | null
+  banExpires: Date | null
   _count: UserCountAggregateOutputType | null
   _avg: UserAvgAggregateOutputType | null
   _sum: UserSumAggregateOutputType | null
@@ -340,6 +361,9 @@ export type UserWhereInput = {
   lastSeen?: Prisma.DateTimeFilter<"User"> | Date | string
   createdAt?: Prisma.DateTimeFilter<"User"> | Date | string
   updatedAt?: Prisma.DateTimeFilter<"User"> | Date | string
+  banned?: Prisma.BoolFilter<"User"> | boolean
+  banReason?: Prisma.StringNullableFilter<"User"> | string | null
+  banExpires?: Prisma.DateTimeNullableFilter<"User"> | Date | string | null
   masterProfile?: Prisma.XOR<Prisma.MasterProfileNullableScalarRelationFilter, Prisma.MasterProfileWhereInput> | null
   jobs?: Prisma.JobListRelationFilter
   proposals?: Prisma.ProposalListRelationFilter
@@ -374,6 +398,9 @@ export type UserOrderByWithRelationInput = {
   lastSeen?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
+  banned?: Prisma.SortOrder
+  banReason?: Prisma.SortOrderInput | Prisma.SortOrder
+  banExpires?: Prisma.SortOrderInput | Prisma.SortOrder
   masterProfile?: Prisma.MasterProfileOrderByWithRelationInput
   jobs?: Prisma.JobOrderByRelationAggregateInput
   proposals?: Prisma.ProposalOrderByRelationAggregateInput
@@ -411,6 +438,9 @@ export type UserWhereUniqueInput = Prisma.AtLeast<{
   lastSeen?: Prisma.DateTimeFilter<"User"> | Date | string
   createdAt?: Prisma.DateTimeFilter<"User"> | Date | string
   updatedAt?: Prisma.DateTimeFilter<"User"> | Date | string
+  banned?: Prisma.BoolFilter<"User"> | boolean
+  banReason?: Prisma.StringNullableFilter<"User"> | string | null
+  banExpires?: Prisma.DateTimeNullableFilter<"User"> | Date | string | null
   masterProfile?: Prisma.XOR<Prisma.MasterProfileNullableScalarRelationFilter, Prisma.MasterProfileWhereInput> | null
   jobs?: Prisma.JobListRelationFilter
   proposals?: Prisma.ProposalListRelationFilter
@@ -445,6 +475,9 @@ export type UserOrderByWithAggregationInput = {
   lastSeen?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
+  banned?: Prisma.SortOrder
+  banReason?: Prisma.SortOrderInput | Prisma.SortOrder
+  banExpires?: Prisma.SortOrderInput | Prisma.SortOrder
   _count?: Prisma.UserCountOrderByAggregateInput
   _avg?: Prisma.UserAvgOrderByAggregateInput
   _max?: Prisma.UserMaxOrderByAggregateInput
@@ -475,6 +508,9 @@ export type UserScalarWhereWithAggregatesInput = {
   lastSeen?: Prisma.DateTimeWithAggregatesFilter<"User"> | Date | string
   createdAt?: Prisma.DateTimeWithAggregatesFilter<"User"> | Date | string
   updatedAt?: Prisma.DateTimeWithAggregatesFilter<"User"> | Date | string
+  banned?: Prisma.BoolWithAggregatesFilter<"User"> | boolean
+  banReason?: Prisma.StringNullableWithAggregatesFilter<"User"> | string | null
+  banExpires?: Prisma.DateTimeNullableWithAggregatesFilter<"User"> | Date | string | null
 }
 
 export type UserCreateInput = {
@@ -497,6 +533,9 @@ export type UserCreateInput = {
   lastSeen?: Date | string
   createdAt?: Date | string
   updatedAt?: Date | string
+  banned?: boolean
+  banReason?: string | null
+  banExpires?: Date | string | null
   masterProfile?: Prisma.MasterProfileCreateNestedOneWithoutUserInput
   jobs?: Prisma.JobCreateNestedManyWithoutClientInput
   proposals?: Prisma.ProposalCreateNestedManyWithoutMasterInput
@@ -531,6 +570,9 @@ export type UserUncheckedCreateInput = {
   lastSeen?: Date | string
   createdAt?: Date | string
   updatedAt?: Date | string
+  banned?: boolean
+  banReason?: string | null
+  banExpires?: Date | string | null
   masterProfile?: Prisma.MasterProfileUncheckedCreateNestedOneWithoutUserInput
   jobs?: Prisma.JobUncheckedCreateNestedManyWithoutClientInput
   proposals?: Prisma.ProposalUncheckedCreateNestedManyWithoutMasterInput
@@ -565,6 +607,9 @@ export type UserUpdateInput = {
   lastSeen?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  banned?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  banReason?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  banExpires?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   masterProfile?: Prisma.MasterProfileUpdateOneWithoutUserNestedInput
   jobs?: Prisma.JobUpdateManyWithoutClientNestedInput
   proposals?: Prisma.ProposalUpdateManyWithoutMasterNestedInput
@@ -599,6 +644,9 @@ export type UserUncheckedUpdateInput = {
   lastSeen?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  banned?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  banReason?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  banExpires?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   masterProfile?: Prisma.MasterProfileUncheckedUpdateOneWithoutUserNestedInput
   jobs?: Prisma.JobUncheckedUpdateManyWithoutClientNestedInput
   proposals?: Prisma.ProposalUncheckedUpdateManyWithoutMasterNestedInput
@@ -633,6 +681,9 @@ export type UserCreateManyInput = {
   lastSeen?: Date | string
   createdAt?: Date | string
   updatedAt?: Date | string
+  banned?: boolean
+  banReason?: string | null
+  banExpires?: Date | string | null
 }
 
 export type UserUpdateManyMutationInput = {
@@ -655,6 +706,9 @@ export type UserUpdateManyMutationInput = {
   lastSeen?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  banned?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  banReason?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  banExpires?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
 }
 
 export type UserUncheckedUpdateManyInput = {
@@ -677,6 +731,9 @@ export type UserUncheckedUpdateManyInput = {
   lastSeen?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  banned?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  banReason?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  banExpires?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
 }
 
 export type UserCountOrderByAggregateInput = {
@@ -699,6 +756,9 @@ export type UserCountOrderByAggregateInput = {
   lastSeen?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
+  banned?: Prisma.SortOrder
+  banReason?: Prisma.SortOrder
+  banExpires?: Prisma.SortOrder
 }
 
 export type UserAvgOrderByAggregateInput = {
@@ -728,6 +788,9 @@ export type UserMaxOrderByAggregateInput = {
   lastSeen?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
+  banned?: Prisma.SortOrder
+  banReason?: Prisma.SortOrder
+  banExpires?: Prisma.SortOrder
 }
 
 export type UserMinOrderByAggregateInput = {
@@ -750,6 +813,9 @@ export type UserMinOrderByAggregateInput = {
   lastSeen?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
+  banned?: Prisma.SortOrder
+  banReason?: Prisma.SortOrder
+  banExpires?: Prisma.SortOrder
 }
 
 export type UserSumOrderByAggregateInput = {
@@ -803,6 +869,10 @@ export type IntFieldUpdateOperationsInput = {
 
 export type DateTimeFieldUpdateOperationsInput = {
   set?: Date | string
+}
+
+export type NullableDateTimeFieldUpdateOperationsInput = {
+  set?: Date | string | null
 }
 
 export type UserCreateNestedOneWithoutMasterProfileInput = {
@@ -995,6 +1065,9 @@ export type UserCreateWithoutMasterProfileInput = {
   lastSeen?: Date | string
   createdAt?: Date | string
   updatedAt?: Date | string
+  banned?: boolean
+  banReason?: string | null
+  banExpires?: Date | string | null
   jobs?: Prisma.JobCreateNestedManyWithoutClientInput
   proposals?: Prisma.ProposalCreateNestedManyWithoutMasterInput
   clientOrders?: Prisma.OrderCreateNestedManyWithoutClientInput
@@ -1028,6 +1101,9 @@ export type UserUncheckedCreateWithoutMasterProfileInput = {
   lastSeen?: Date | string
   createdAt?: Date | string
   updatedAt?: Date | string
+  banned?: boolean
+  banReason?: string | null
+  banExpires?: Date | string | null
   jobs?: Prisma.JobUncheckedCreateNestedManyWithoutClientInput
   proposals?: Prisma.ProposalUncheckedCreateNestedManyWithoutMasterInput
   clientOrders?: Prisma.OrderUncheckedCreateNestedManyWithoutClientInput
@@ -1077,6 +1153,9 @@ export type UserUpdateWithoutMasterProfileInput = {
   lastSeen?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  banned?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  banReason?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  banExpires?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   jobs?: Prisma.JobUpdateManyWithoutClientNestedInput
   proposals?: Prisma.ProposalUpdateManyWithoutMasterNestedInput
   clientOrders?: Prisma.OrderUpdateManyWithoutClientNestedInput
@@ -1110,6 +1189,9 @@ export type UserUncheckedUpdateWithoutMasterProfileInput = {
   lastSeen?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  banned?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  banReason?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  banExpires?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   jobs?: Prisma.JobUncheckedUpdateManyWithoutClientNestedInput
   proposals?: Prisma.ProposalUncheckedUpdateManyWithoutMasterNestedInput
   clientOrders?: Prisma.OrderUncheckedUpdateManyWithoutClientNestedInput
@@ -1143,6 +1225,9 @@ export type UserCreateWithoutJobsInput = {
   lastSeen?: Date | string
   createdAt?: Date | string
   updatedAt?: Date | string
+  banned?: boolean
+  banReason?: string | null
+  banExpires?: Date | string | null
   masterProfile?: Prisma.MasterProfileCreateNestedOneWithoutUserInput
   proposals?: Prisma.ProposalCreateNestedManyWithoutMasterInput
   clientOrders?: Prisma.OrderCreateNestedManyWithoutClientInput
@@ -1176,6 +1261,9 @@ export type UserUncheckedCreateWithoutJobsInput = {
   lastSeen?: Date | string
   createdAt?: Date | string
   updatedAt?: Date | string
+  banned?: boolean
+  banReason?: string | null
+  banExpires?: Date | string | null
   masterProfile?: Prisma.MasterProfileUncheckedCreateNestedOneWithoutUserInput
   proposals?: Prisma.ProposalUncheckedCreateNestedManyWithoutMasterInput
   clientOrders?: Prisma.OrderUncheckedCreateNestedManyWithoutClientInput
@@ -1225,6 +1313,9 @@ export type UserUpdateWithoutJobsInput = {
   lastSeen?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  banned?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  banReason?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  banExpires?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   masterProfile?: Prisma.MasterProfileUpdateOneWithoutUserNestedInput
   proposals?: Prisma.ProposalUpdateManyWithoutMasterNestedInput
   clientOrders?: Prisma.OrderUpdateManyWithoutClientNestedInput
@@ -1258,6 +1349,9 @@ export type UserUncheckedUpdateWithoutJobsInput = {
   lastSeen?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  banned?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  banReason?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  banExpires?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   masterProfile?: Prisma.MasterProfileUncheckedUpdateOneWithoutUserNestedInput
   proposals?: Prisma.ProposalUncheckedUpdateManyWithoutMasterNestedInput
   clientOrders?: Prisma.OrderUncheckedUpdateManyWithoutClientNestedInput
@@ -1291,6 +1385,9 @@ export type UserCreateWithoutProposalsInput = {
   lastSeen?: Date | string
   createdAt?: Date | string
   updatedAt?: Date | string
+  banned?: boolean
+  banReason?: string | null
+  banExpires?: Date | string | null
   masterProfile?: Prisma.MasterProfileCreateNestedOneWithoutUserInput
   jobs?: Prisma.JobCreateNestedManyWithoutClientInput
   clientOrders?: Prisma.OrderCreateNestedManyWithoutClientInput
@@ -1324,6 +1421,9 @@ export type UserUncheckedCreateWithoutProposalsInput = {
   lastSeen?: Date | string
   createdAt?: Date | string
   updatedAt?: Date | string
+  banned?: boolean
+  banReason?: string | null
+  banExpires?: Date | string | null
   masterProfile?: Prisma.MasterProfileUncheckedCreateNestedOneWithoutUserInput
   jobs?: Prisma.JobUncheckedCreateNestedManyWithoutClientInput
   clientOrders?: Prisma.OrderUncheckedCreateNestedManyWithoutClientInput
@@ -1373,6 +1473,9 @@ export type UserUpdateWithoutProposalsInput = {
   lastSeen?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  banned?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  banReason?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  banExpires?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   masterProfile?: Prisma.MasterProfileUpdateOneWithoutUserNestedInput
   jobs?: Prisma.JobUpdateManyWithoutClientNestedInput
   clientOrders?: Prisma.OrderUpdateManyWithoutClientNestedInput
@@ -1406,6 +1509,9 @@ export type UserUncheckedUpdateWithoutProposalsInput = {
   lastSeen?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  banned?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  banReason?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  banExpires?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   masterProfile?: Prisma.MasterProfileUncheckedUpdateOneWithoutUserNestedInput
   jobs?: Prisma.JobUncheckedUpdateManyWithoutClientNestedInput
   clientOrders?: Prisma.OrderUncheckedUpdateManyWithoutClientNestedInput
@@ -1439,6 +1545,9 @@ export type UserCreateWithoutClientOrdersInput = {
   lastSeen?: Date | string
   createdAt?: Date | string
   updatedAt?: Date | string
+  banned?: boolean
+  banReason?: string | null
+  banExpires?: Date | string | null
   masterProfile?: Prisma.MasterProfileCreateNestedOneWithoutUserInput
   jobs?: Prisma.JobCreateNestedManyWithoutClientInput
   proposals?: Prisma.ProposalCreateNestedManyWithoutMasterInput
@@ -1472,6 +1581,9 @@ export type UserUncheckedCreateWithoutClientOrdersInput = {
   lastSeen?: Date | string
   createdAt?: Date | string
   updatedAt?: Date | string
+  banned?: boolean
+  banReason?: string | null
+  banExpires?: Date | string | null
   masterProfile?: Prisma.MasterProfileUncheckedCreateNestedOneWithoutUserInput
   jobs?: Prisma.JobUncheckedCreateNestedManyWithoutClientInput
   proposals?: Prisma.ProposalUncheckedCreateNestedManyWithoutMasterInput
@@ -1510,6 +1622,9 @@ export type UserCreateWithoutMasterOrdersInput = {
   lastSeen?: Date | string
   createdAt?: Date | string
   updatedAt?: Date | string
+  banned?: boolean
+  banReason?: string | null
+  banExpires?: Date | string | null
   masterProfile?: Prisma.MasterProfileCreateNestedOneWithoutUserInput
   jobs?: Prisma.JobCreateNestedManyWithoutClientInput
   proposals?: Prisma.ProposalCreateNestedManyWithoutMasterInput
@@ -1543,6 +1658,9 @@ export type UserUncheckedCreateWithoutMasterOrdersInput = {
   lastSeen?: Date | string
   createdAt?: Date | string
   updatedAt?: Date | string
+  banned?: boolean
+  banReason?: string | null
+  banExpires?: Date | string | null
   masterProfile?: Prisma.MasterProfileUncheckedCreateNestedOneWithoutUserInput
   jobs?: Prisma.JobUncheckedCreateNestedManyWithoutClientInput
   proposals?: Prisma.ProposalUncheckedCreateNestedManyWithoutMasterInput
@@ -1592,6 +1710,9 @@ export type UserUpdateWithoutClientOrdersInput = {
   lastSeen?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  banned?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  banReason?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  banExpires?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   masterProfile?: Prisma.MasterProfileUpdateOneWithoutUserNestedInput
   jobs?: Prisma.JobUpdateManyWithoutClientNestedInput
   proposals?: Prisma.ProposalUpdateManyWithoutMasterNestedInput
@@ -1625,6 +1746,9 @@ export type UserUncheckedUpdateWithoutClientOrdersInput = {
   lastSeen?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  banned?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  banReason?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  banExpires?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   masterProfile?: Prisma.MasterProfileUncheckedUpdateOneWithoutUserNestedInput
   jobs?: Prisma.JobUncheckedUpdateManyWithoutClientNestedInput
   proposals?: Prisma.ProposalUncheckedUpdateManyWithoutMasterNestedInput
@@ -1669,6 +1793,9 @@ export type UserUpdateWithoutMasterOrdersInput = {
   lastSeen?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  banned?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  banReason?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  banExpires?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   masterProfile?: Prisma.MasterProfileUpdateOneWithoutUserNestedInput
   jobs?: Prisma.JobUpdateManyWithoutClientNestedInput
   proposals?: Prisma.ProposalUpdateManyWithoutMasterNestedInput
@@ -1702,6 +1829,9 @@ export type UserUncheckedUpdateWithoutMasterOrdersInput = {
   lastSeen?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  banned?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  banReason?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  banExpires?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   masterProfile?: Prisma.MasterProfileUncheckedUpdateOneWithoutUserNestedInput
   jobs?: Prisma.JobUncheckedUpdateManyWithoutClientNestedInput
   proposals?: Prisma.ProposalUncheckedUpdateManyWithoutMasterNestedInput
@@ -1735,6 +1865,9 @@ export type UserCreateWithoutOrderEventsInput = {
   lastSeen?: Date | string
   createdAt?: Date | string
   updatedAt?: Date | string
+  banned?: boolean
+  banReason?: string | null
+  banExpires?: Date | string | null
   masterProfile?: Prisma.MasterProfileCreateNestedOneWithoutUserInput
   jobs?: Prisma.JobCreateNestedManyWithoutClientInput
   proposals?: Prisma.ProposalCreateNestedManyWithoutMasterInput
@@ -1768,6 +1901,9 @@ export type UserUncheckedCreateWithoutOrderEventsInput = {
   lastSeen?: Date | string
   createdAt?: Date | string
   updatedAt?: Date | string
+  banned?: boolean
+  banReason?: string | null
+  banExpires?: Date | string | null
   masterProfile?: Prisma.MasterProfileUncheckedCreateNestedOneWithoutUserInput
   jobs?: Prisma.JobUncheckedCreateNestedManyWithoutClientInput
   proposals?: Prisma.ProposalUncheckedCreateNestedManyWithoutMasterInput
@@ -1817,6 +1953,9 @@ export type UserUpdateWithoutOrderEventsInput = {
   lastSeen?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  banned?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  banReason?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  banExpires?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   masterProfile?: Prisma.MasterProfileUpdateOneWithoutUserNestedInput
   jobs?: Prisma.JobUpdateManyWithoutClientNestedInput
   proposals?: Prisma.ProposalUpdateManyWithoutMasterNestedInput
@@ -1850,6 +1989,9 @@ export type UserUncheckedUpdateWithoutOrderEventsInput = {
   lastSeen?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  banned?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  banReason?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  banExpires?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   masterProfile?: Prisma.MasterProfileUncheckedUpdateOneWithoutUserNestedInput
   jobs?: Prisma.JobUncheckedUpdateManyWithoutClientNestedInput
   proposals?: Prisma.ProposalUncheckedUpdateManyWithoutMasterNestedInput
@@ -1883,6 +2025,9 @@ export type UserCreateWithoutChatsInput = {
   lastSeen?: Date | string
   createdAt?: Date | string
   updatedAt?: Date | string
+  banned?: boolean
+  banReason?: string | null
+  banExpires?: Date | string | null
   masterProfile?: Prisma.MasterProfileCreateNestedOneWithoutUserInput
   jobs?: Prisma.JobCreateNestedManyWithoutClientInput
   proposals?: Prisma.ProposalCreateNestedManyWithoutMasterInput
@@ -1916,6 +2061,9 @@ export type UserUncheckedCreateWithoutChatsInput = {
   lastSeen?: Date | string
   createdAt?: Date | string
   updatedAt?: Date | string
+  banned?: boolean
+  banReason?: string | null
+  banExpires?: Date | string | null
   masterProfile?: Prisma.MasterProfileUncheckedCreateNestedOneWithoutUserInput
   jobs?: Prisma.JobUncheckedCreateNestedManyWithoutClientInput
   proposals?: Prisma.ProposalUncheckedCreateNestedManyWithoutMasterInput
@@ -1965,6 +2113,9 @@ export type UserUpdateWithoutChatsInput = {
   lastSeen?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  banned?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  banReason?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  banExpires?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   masterProfile?: Prisma.MasterProfileUpdateOneWithoutUserNestedInput
   jobs?: Prisma.JobUpdateManyWithoutClientNestedInput
   proposals?: Prisma.ProposalUpdateManyWithoutMasterNestedInput
@@ -1998,6 +2149,9 @@ export type UserUncheckedUpdateWithoutChatsInput = {
   lastSeen?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  banned?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  banReason?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  banExpires?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   masterProfile?: Prisma.MasterProfileUncheckedUpdateOneWithoutUserNestedInput
   jobs?: Prisma.JobUncheckedUpdateManyWithoutClientNestedInput
   proposals?: Prisma.ProposalUncheckedUpdateManyWithoutMasterNestedInput
@@ -2031,6 +2185,9 @@ export type UserCreateWithoutSentMessagesInput = {
   lastSeen?: Date | string
   createdAt?: Date | string
   updatedAt?: Date | string
+  banned?: boolean
+  banReason?: string | null
+  banExpires?: Date | string | null
   masterProfile?: Prisma.MasterProfileCreateNestedOneWithoutUserInput
   jobs?: Prisma.JobCreateNestedManyWithoutClientInput
   proposals?: Prisma.ProposalCreateNestedManyWithoutMasterInput
@@ -2064,6 +2221,9 @@ export type UserUncheckedCreateWithoutSentMessagesInput = {
   lastSeen?: Date | string
   createdAt?: Date | string
   updatedAt?: Date | string
+  banned?: boolean
+  banReason?: string | null
+  banExpires?: Date | string | null
   masterProfile?: Prisma.MasterProfileUncheckedCreateNestedOneWithoutUserInput
   jobs?: Prisma.JobUncheckedCreateNestedManyWithoutClientInput
   proposals?: Prisma.ProposalUncheckedCreateNestedManyWithoutMasterInput
@@ -2113,6 +2273,9 @@ export type UserUpdateWithoutSentMessagesInput = {
   lastSeen?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  banned?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  banReason?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  banExpires?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   masterProfile?: Prisma.MasterProfileUpdateOneWithoutUserNestedInput
   jobs?: Prisma.JobUpdateManyWithoutClientNestedInput
   proposals?: Prisma.ProposalUpdateManyWithoutMasterNestedInput
@@ -2146,6 +2309,9 @@ export type UserUncheckedUpdateWithoutSentMessagesInput = {
   lastSeen?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  banned?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  banReason?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  banExpires?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   masterProfile?: Prisma.MasterProfileUncheckedUpdateOneWithoutUserNestedInput
   jobs?: Prisma.JobUncheckedUpdateManyWithoutClientNestedInput
   proposals?: Prisma.ProposalUncheckedUpdateManyWithoutMasterNestedInput
@@ -2179,6 +2345,9 @@ export type UserCreateWithoutAuthoredReviewsInput = {
   lastSeen?: Date | string
   createdAt?: Date | string
   updatedAt?: Date | string
+  banned?: boolean
+  banReason?: string | null
+  banExpires?: Date | string | null
   masterProfile?: Prisma.MasterProfileCreateNestedOneWithoutUserInput
   jobs?: Prisma.JobCreateNestedManyWithoutClientInput
   proposals?: Prisma.ProposalCreateNestedManyWithoutMasterInput
@@ -2212,6 +2381,9 @@ export type UserUncheckedCreateWithoutAuthoredReviewsInput = {
   lastSeen?: Date | string
   createdAt?: Date | string
   updatedAt?: Date | string
+  banned?: boolean
+  banReason?: string | null
+  banExpires?: Date | string | null
   masterProfile?: Prisma.MasterProfileUncheckedCreateNestedOneWithoutUserInput
   jobs?: Prisma.JobUncheckedCreateNestedManyWithoutClientInput
   proposals?: Prisma.ProposalUncheckedCreateNestedManyWithoutMasterInput
@@ -2261,6 +2433,9 @@ export type UserUpdateWithoutAuthoredReviewsInput = {
   lastSeen?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  banned?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  banReason?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  banExpires?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   masterProfile?: Prisma.MasterProfileUpdateOneWithoutUserNestedInput
   jobs?: Prisma.JobUpdateManyWithoutClientNestedInput
   proposals?: Prisma.ProposalUpdateManyWithoutMasterNestedInput
@@ -2294,6 +2469,9 @@ export type UserUncheckedUpdateWithoutAuthoredReviewsInput = {
   lastSeen?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  banned?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  banReason?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  banExpires?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   masterProfile?: Prisma.MasterProfileUncheckedUpdateOneWithoutUserNestedInput
   jobs?: Prisma.JobUncheckedUpdateManyWithoutClientNestedInput
   proposals?: Prisma.ProposalUncheckedUpdateManyWithoutMasterNestedInput
@@ -2327,6 +2505,9 @@ export type UserCreateWithoutNotificationsInput = {
   lastSeen?: Date | string
   createdAt?: Date | string
   updatedAt?: Date | string
+  banned?: boolean
+  banReason?: string | null
+  banExpires?: Date | string | null
   masterProfile?: Prisma.MasterProfileCreateNestedOneWithoutUserInput
   jobs?: Prisma.JobCreateNestedManyWithoutClientInput
   proposals?: Prisma.ProposalCreateNestedManyWithoutMasterInput
@@ -2360,6 +2541,9 @@ export type UserUncheckedCreateWithoutNotificationsInput = {
   lastSeen?: Date | string
   createdAt?: Date | string
   updatedAt?: Date | string
+  banned?: boolean
+  banReason?: string | null
+  banExpires?: Date | string | null
   masterProfile?: Prisma.MasterProfileUncheckedCreateNestedOneWithoutUserInput
   jobs?: Prisma.JobUncheckedCreateNestedManyWithoutClientInput
   proposals?: Prisma.ProposalUncheckedCreateNestedManyWithoutMasterInput
@@ -2409,6 +2593,9 @@ export type UserUpdateWithoutNotificationsInput = {
   lastSeen?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  banned?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  banReason?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  banExpires?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   masterProfile?: Prisma.MasterProfileUpdateOneWithoutUserNestedInput
   jobs?: Prisma.JobUpdateManyWithoutClientNestedInput
   proposals?: Prisma.ProposalUpdateManyWithoutMasterNestedInput
@@ -2442,6 +2629,9 @@ export type UserUncheckedUpdateWithoutNotificationsInput = {
   lastSeen?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  banned?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  banReason?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  banExpires?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   masterProfile?: Prisma.MasterProfileUncheckedUpdateOneWithoutUserNestedInput
   jobs?: Prisma.JobUncheckedUpdateManyWithoutClientNestedInput
   proposals?: Prisma.ProposalUncheckedUpdateManyWithoutMasterNestedInput
@@ -2475,6 +2665,9 @@ export type UserCreateWithoutSessionsInput = {
   lastSeen?: Date | string
   createdAt?: Date | string
   updatedAt?: Date | string
+  banned?: boolean
+  banReason?: string | null
+  banExpires?: Date | string | null
   masterProfile?: Prisma.MasterProfileCreateNestedOneWithoutUserInput
   jobs?: Prisma.JobCreateNestedManyWithoutClientInput
   proposals?: Prisma.ProposalCreateNestedManyWithoutMasterInput
@@ -2508,6 +2701,9 @@ export type UserUncheckedCreateWithoutSessionsInput = {
   lastSeen?: Date | string
   createdAt?: Date | string
   updatedAt?: Date | string
+  banned?: boolean
+  banReason?: string | null
+  banExpires?: Date | string | null
   masterProfile?: Prisma.MasterProfileUncheckedCreateNestedOneWithoutUserInput
   jobs?: Prisma.JobUncheckedCreateNestedManyWithoutClientInput
   proposals?: Prisma.ProposalUncheckedCreateNestedManyWithoutMasterInput
@@ -2557,6 +2753,9 @@ export type UserUpdateWithoutSessionsInput = {
   lastSeen?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  banned?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  banReason?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  banExpires?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   masterProfile?: Prisma.MasterProfileUpdateOneWithoutUserNestedInput
   jobs?: Prisma.JobUpdateManyWithoutClientNestedInput
   proposals?: Prisma.ProposalUpdateManyWithoutMasterNestedInput
@@ -2590,6 +2789,9 @@ export type UserUncheckedUpdateWithoutSessionsInput = {
   lastSeen?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  banned?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  banReason?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  banExpires?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   masterProfile?: Prisma.MasterProfileUncheckedUpdateOneWithoutUserNestedInput
   jobs?: Prisma.JobUncheckedUpdateManyWithoutClientNestedInput
   proposals?: Prisma.ProposalUncheckedUpdateManyWithoutMasterNestedInput
@@ -2623,6 +2825,9 @@ export type UserCreateWithoutAccountsInput = {
   lastSeen?: Date | string
   createdAt?: Date | string
   updatedAt?: Date | string
+  banned?: boolean
+  banReason?: string | null
+  banExpires?: Date | string | null
   masterProfile?: Prisma.MasterProfileCreateNestedOneWithoutUserInput
   jobs?: Prisma.JobCreateNestedManyWithoutClientInput
   proposals?: Prisma.ProposalCreateNestedManyWithoutMasterInput
@@ -2656,6 +2861,9 @@ export type UserUncheckedCreateWithoutAccountsInput = {
   lastSeen?: Date | string
   createdAt?: Date | string
   updatedAt?: Date | string
+  banned?: boolean
+  banReason?: string | null
+  banExpires?: Date | string | null
   masterProfile?: Prisma.MasterProfileUncheckedCreateNestedOneWithoutUserInput
   jobs?: Prisma.JobUncheckedCreateNestedManyWithoutClientInput
   proposals?: Prisma.ProposalUncheckedCreateNestedManyWithoutMasterInput
@@ -2705,6 +2913,9 @@ export type UserUpdateWithoutAccountsInput = {
   lastSeen?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  banned?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  banReason?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  banExpires?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   masterProfile?: Prisma.MasterProfileUpdateOneWithoutUserNestedInput
   jobs?: Prisma.JobUpdateManyWithoutClientNestedInput
   proposals?: Prisma.ProposalUpdateManyWithoutMasterNestedInput
@@ -2738,6 +2949,9 @@ export type UserUncheckedUpdateWithoutAccountsInput = {
   lastSeen?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  banned?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  banReason?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  banExpires?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   masterProfile?: Prisma.MasterProfileUncheckedUpdateOneWithoutUserNestedInput
   jobs?: Prisma.JobUncheckedUpdateManyWithoutClientNestedInput
   proposals?: Prisma.ProposalUncheckedUpdateManyWithoutMasterNestedInput
@@ -2892,6 +3106,9 @@ export type UserSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = r
   lastSeen?: boolean
   createdAt?: boolean
   updatedAt?: boolean
+  banned?: boolean
+  banReason?: boolean
+  banExpires?: boolean
   masterProfile?: boolean | Prisma.User$masterProfileArgs<ExtArgs>
   jobs?: boolean | Prisma.User$jobsArgs<ExtArgs>
   proposals?: boolean | Prisma.User$proposalsArgs<ExtArgs>
@@ -2927,6 +3144,9 @@ export type UserSelectCreateManyAndReturn<ExtArgs extends runtime.Types.Extensio
   lastSeen?: boolean
   createdAt?: boolean
   updatedAt?: boolean
+  banned?: boolean
+  banReason?: boolean
+  banExpires?: boolean
 }, ExtArgs["result"]["user"]>
 
 export type UserSelectUpdateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
@@ -2949,6 +3169,9 @@ export type UserSelectUpdateManyAndReturn<ExtArgs extends runtime.Types.Extensio
   lastSeen?: boolean
   createdAt?: boolean
   updatedAt?: boolean
+  banned?: boolean
+  banReason?: boolean
+  banExpires?: boolean
 }, ExtArgs["result"]["user"]>
 
 export type UserSelectScalar = {
@@ -2971,9 +3194,12 @@ export type UserSelectScalar = {
   lastSeen?: boolean
   createdAt?: boolean
   updatedAt?: boolean
+  banned?: boolean
+  banReason?: boolean
+  banExpires?: boolean
 }
 
-export type UserOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "email" | "emailVerified" | "name" | "username" | "phone" | "avatar" | "avatarPublicId" | "bio" | "role" | "city" | "avgRatingAsMaster" | "reviewsCountAsMaster" | "avgRatingAsClient" | "reviewsCountAsClient" | "isOnline" | "lastSeen" | "createdAt" | "updatedAt", ExtArgs["result"]["user"]>
+export type UserOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "email" | "emailVerified" | "name" | "username" | "phone" | "avatar" | "avatarPublicId" | "bio" | "role" | "city" | "avgRatingAsMaster" | "reviewsCountAsMaster" | "avgRatingAsClient" | "reviewsCountAsClient" | "isOnline" | "lastSeen" | "createdAt" | "updatedAt" | "banned" | "banReason" | "banExpires", ExtArgs["result"]["user"]>
 export type UserInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   masterProfile?: boolean | Prisma.User$masterProfileArgs<ExtArgs>
   jobs?: boolean | Prisma.User$jobsArgs<ExtArgs>
@@ -3028,6 +3254,9 @@ export type $UserPayload<ExtArgs extends runtime.Types.Extensions.InternalArgs =
     lastSeen: Date
     createdAt: Date
     updatedAt: Date
+    banned: boolean
+    banReason: string | null
+    banExpires: Date | null
   }, ExtArgs["result"]["user"]>
   composites: {}
 }
@@ -3482,6 +3711,9 @@ export interface UserFieldRefs {
   readonly lastSeen: Prisma.FieldRef<"User", 'DateTime'>
   readonly createdAt: Prisma.FieldRef<"User", 'DateTime'>
   readonly updatedAt: Prisma.FieldRef<"User", 'DateTime'>
+  readonly banned: Prisma.FieldRef<"User", 'Boolean'>
+  readonly banReason: Prisma.FieldRef<"User", 'String'>
+  readonly banExpires: Prisma.FieldRef<"User", 'DateTime'>
 }
     
 

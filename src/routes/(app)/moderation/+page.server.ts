@@ -4,6 +4,7 @@ import { prisma } from '$lib/server/prisma'
 import { z } from 'zod'
 import type { PageServerLoad } from './$types'
 
+
 const PER_PAGE = 12
 
 const ParamsSchema = z.object({

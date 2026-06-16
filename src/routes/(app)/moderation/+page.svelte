@@ -5,17 +5,18 @@
   import * as Pagination from '$lib/components/ui/pagination/index.js'
   import { Input } from '$lib/components/ui/input/index.js'
   import { Skeleton } from '$lib/components/ui/skeleton/index.js'
-  import { Search, X, Phone,  ChevronRight } from '@lucide/svelte'
+  import { Search, X, Phone, ChevronRight } from '@lucide/svelte'
   import { page, navigating } from '$app/state'
   import { goto } from '$app/navigation'
   import { onDestroy } from 'svelte'
   import type { PageData } from './$types'
+  import { untrack } from 'svelte'
 
   let { data }: { data: PageData } = $props()
 
   const loading = $derived(navigating.to?.url.pathname === '/moderation')
 
-  let query = $state(data.q)
+  let query = $state(untrack(() => data.q))
   let timer: ReturnType<typeof setTimeout> | undefined
 
   function runSearch(): void {

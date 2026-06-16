@@ -1,12 +1,14 @@
-import { betterAuth } from "better-auth";
-import { prismaAdapter } from "better-auth/adapters/prisma";
-import { sveltekitCookies } from "better-auth/svelte-kit";
-import { getRequestEvent } from "$app/server";
-import { env } from "$env/dynamic/private";
-import { prisma } from "$lib/server/prisma";
+import { betterAuth } from 'better-auth'
+import { prismaAdapter } from 'better-auth/adapters/prisma'
+import { sveltekitCookies } from 'better-auth/svelte-kit'
+import { getRequestEvent } from '$app/server'
+import { env } from '$env/dynamic/private'
+import { prisma } from '$lib/server/prisma'
+import { admin } from 'better-auth/plugins'
+import { ac, roles } from '$lib/server/auth-ac'
 
 export const auth = betterAuth({
-  database: prismaAdapter(prisma, { provider: "postgresql" }),
+  database: prismaAdapter(prisma, { provider: 'postgresql' }),
 
   secret: env.BETTER_AUTH_SECRET,
   baseURL: env.BETTER_AUTH_URL,
@@ -23,11 +25,11 @@ export const auth = betterAuth({
 
   user: {
     // Platform schema stores the avatar as `avatar`; Better Auth's core field is `image`.
-    fields: { image: "avatar" },
+    fields: { image: 'avatar' },
     additionalFields: {
       // Surface the platform Role on the session so the gate can read it without an
       // extra query. input:false → clients can never set/escalate their own role.
-      role: { type: "string", input: false },
+      role: { type: 'string', input: false },
     },
   },
 
@@ -41,8 +43,16 @@ export const auth = betterAuth({
   // CSRF / origin allowlist for auth endpoints.
   trustedOrigins: env.BETTER_AUTH_URL ? [env.BETTER_AUTH_URL] : [],
 
-  // MUST be the last plugin so it can flush Set-Cookie on the way out.
-  plugins: [sveltekitCookies(getRequestEvent)],
-});
+  plugins: [
+    admin({
+      ac,
+      roles,
+      adminRole: 'ADMIN',
+      defaultRole: 'CLIENT',
+      defaultBanReason: 'Порушення правил',
+    }),
+    sveltekitCookies(getRequestEvent), // ← лишається ОСТАННІМ
+  ],
+})
 
-export type Auth = typeof auth;
+export type Auth = typeof auth

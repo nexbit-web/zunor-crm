@@ -12,7 +12,12 @@ export const load: LayoutServerLoad = async ({ locals, depends }) => {
   })
 
   return {
-    user: { name: user.name, email: user.email, image: user.image ?? null },
+    user: {
+      name: user.name,
+      email: user.email,
+      image: user.image ?? null,
+      role: user.role,
+    },
     moderationPending,
   }
 }
