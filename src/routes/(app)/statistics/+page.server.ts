@@ -1,141 +1,200 @@
-// src/routes/(app)/statistics/+page.server.ts
-import { requireStaff } from '$lib/server/guards'
+import { z } from 'zod'
+import { requireRole } from '$lib/server/guards'
 import { prisma } from '$lib/server/prisma'
 import type { PageServerLoad } from './$types'
 
-export const load: PageServerLoad = async ({ locals, depends }) => {
-  requireStaff(locals)
-  depends('app:stats') // ← маркер для invalidate('app:stats')
+const Period = z.enum(['7d', '30d', '90d', '12m'])
+type Gran = 'day' | 'week' | 'month'
 
+const startOfDay = (d: Date) =>
+  new Date(d.getFullYear(), d.getMonth(), d.getDate())
+const weekStart = (d: Date) => {
+  const x = startOfDay(d)
+  return new Date(x.getTime() - ((x.getDay() + 6) % 7) * 864e5)
+}
+const fmtDay = new Intl.DateTimeFormat('uk-UA', {
+  day: '2-digit',
+  month: '2-digit',
+})
+const fmtMonth = new Intl.DateTimeFormat('uk-UA', { month: 'short' })
+
+function bucketOf(d: Date, gran: Gran) {
+  if (gran === 'day') {
+    const s = startOfDay(d)
+    return { key: s.toISOString().slice(0, 10), label: fmtDay.format(s) }
+  }
+  if (gran === 'week') {
+    const s = weekStart(d)
+    return { key: s.toISOString().slice(0, 10), label: fmtDay.format(s) }
+  }
+  const s = new Date(d.getFullYear(), d.getMonth(), 1)
+  return {
+    key: `${s.getFullYear()}-${s.getMonth()}`,
+    label: fmtMonth.format(s),
+  }
+}
+
+function windowFor(period: z.infer<typeof Period>) {
   const now = new Date()
-  const since = new Date(now.getFullYear(), now.getMonth() - 5, 1) // початок 6-місячного вікна
+  if (period === '12m') {
+    const since = new Date(now.getFullYear(), now.getMonth() - 11, 1)
+    const prevSince = new Date(since.getFullYear(), since.getMonth() - 12, 1)
+    return { now, since, prevSince, gran: 'month' as Gran }
+  }
+  const days = period === '7d' ? 7 : period === '30d' ? 30 : 90
+  const since = startOfDay(new Date(now.getTime() - (days - 1) * 864e5))
+  const prevSince = startOfDay(new Date(since.getTime() - days * 864e5))
+  return {
+    now,
+    since,
+    prevSince,
+    gran: (period === '90d' ? 'week' : 'day') as Gran,
+  }
+}
+
+function pctDelta(cur: number, prev: number): number | null {
+  if (!prev) return cur > 0 ? 100 : null
+  return ((cur - prev) / prev) * 100
+}
+
+export const load: PageServerLoad = async ({ locals, url, depends }) => {
+  requireRole(locals, 'MANAGER') // аналітика — MANAGER+
+  depends('app:stats')
+
+  const period = Period.catch('30d').parse(
+    url.searchParams.get('period') ?? '30d',
+  )
+  const { now, since, prevSince, gran } = windowFor(period)
 
   const [
-    usersByRole,
-    emailVerified,
-    mastersByStatus,
-    mastersActive,
-    jobsByStatus,
-    ordersByStatus,
-    gmv,
-    proposals,
-    reviewsAgg,
+    users,
+    ordersCreated,
+    completed,
+    comp,
+    statusGroup,
+    reviewAgg,
     chats,
     messages,
-    growthUsers,
-    growthOrders,
+    proposals,
   ] = await Promise.all([
-    prisma.user.groupBy({ by: ['role'], _count: { _all: true } }),
-    prisma.user.count({ where: { emailVerified: true } }),
-    prisma.masterProfile.groupBy({
-      by: ['verificationStatus'],
-      _count: { _all: true },
-    }),
-    prisma.masterProfile.count({ where: { isActive: true } }),
-    prisma.job.groupBy({ by: ['status'], _count: { _all: true } }),
-    prisma.order.groupBy({ by: ['status'], _count: { _all: true } }),
-    prisma.order.aggregate({
-      where: { status: 'COMPLETED' },
-      _sum: { priceCents: true },
-    }),
-    prisma.proposal.count(),
-    prisma.review.aggregate({ _avg: { rating: true }, _count: { _all: true } }),
-    prisma.chat.count(),
-    prisma.message.count(),
     prisma.user.findMany({
-      where: { createdAt: { gte: since } },
-      select: { createdAt: true, role: true },
-    }),
-    prisma.order.findMany({
-      where: { createdAt: { gte: since } },
+      where: { createdAt: { gte: prevSince } },
       select: { createdAt: true },
     }),
+    prisma.order.findMany({
+      where: { removedAt: null, createdAt: { gte: prevSince } },
+      select: { createdAt: true },
+    }),
+    prisma.order.findMany({
+      where: {
+        removedAt: null,
+        status: 'COMPLETED',
+        completedAt: { gte: prevSince },
+      },
+      select: { completedAt: true, priceCents: true },
+    }),
+    prisma.user.groupBy({ by: ['role'], _count: true }),
+    prisma.order.groupBy({
+      by: ['status'],
+      where: { removedAt: null },
+      _count: true,
+    }),
+    prisma.review.aggregate({ _avg: { rating: true }, _count: true }),
+    prisma.chat.count(),
+    prisma.message.count(),
+    prisma.proposal.count(),
   ])
 
-  const role = (r: string) =>
-    usersByRole.find((x) => x.role === r)?._count._all ?? 0
-  const verif = (s: string) =>
-    mastersByStatus.find((x) => x.verificationStatus === s)?._count._all ?? 0
-  const job = (s: string) =>
-    jobsByStatus.find((x) => x.status === s)?._count._all ?? 0
-  const order = (s: string) =>
-    ordersByStatus.find((x) => x.status === s)?._count._all ?? 0
-
-  // Бакети по місяцях (6 шт.)
-  const labelFmt = new Intl.DateTimeFormat('uk-UA', { month: 'short' })
-  const buckets = Array.from({ length: 6 }, (_, i) => {
-    const d = new Date(now.getFullYear(), now.getMonth() - (5 - i), 1)
-    return {
-      key: `${d.getFullYear()}-${d.getMonth()}`,
-      label: labelFmt.format(d),
+  // Series для головного графіка (нові за відрізок), з пре-сідом порожніх бакетів
+  const seed = new Map<
+    string,
+    { label: string; users: number; orders: number }
+  >()
+  let cur =
+    gran === 'day'
+      ? startOfDay(since)
+      : gran === 'week'
+        ? weekStart(since)
+        : new Date(since)
+  while (cur <= now) {
+    const { key, label } = bucketOf(cur, gran)
+    seed.set(key, { label, users: 0, orders: 0 })
+    cur =
+      gran === 'day'
+        ? new Date(cur.getTime() + 864e5)
+        : gran === 'week'
+          ? new Date(cur.getTime() + 7 * 864e5)
+          : new Date(cur.getFullYear(), cur.getMonth() + 1, 1)
+  }
+  for (const u of users)
+    if (u.createdAt >= since) {
+      const b = seed.get(bucketOf(u.createdAt, gran).key)
+      if (b) b.users++
     }
-  })
-  const idxOf = new Map(buckets.map((b, i) => [b.key, i]))
-  const keyOf = (d: Date) => `${d.getFullYear()}-${d.getMonth()}`
+  for (const o of ordersCreated)
+    if (o.createdAt >= since) {
+      const b = seed.get(bucketOf(o.createdAt, gran).key)
+      if (b) b.orders++
+    }
+  const series = [...seed.values()]
 
-  const usersSeries = buckets.map((b) => ({ label: b.label, value: 0 }))
-  const clientsSeries = buckets.map((b) => ({ label: b.label, value: 0 }))
-  const mastersSeries = buckets.map((b) => ({ label: b.label, value: 0 }))
-  for (const u of growthUsers) {
-    const i = idxOf.get(keyOf(u.createdAt))
-    if (i === undefined) continue
-    usersSeries[i].value++
-    if (u.role === 'CLIENT') clientsSeries[i].value++
-    else if (u.role === 'MASTER') mastersSeries[i].value++
-  }
+  // KPI: поточне vs попереднє рівне вікно
+  const inCur = (d: Date) => d >= since
+  const inPrev = (d: Date) => d >= prevSince && d < since
 
-  const ordersSeries = buckets.map((b) => ({ label: b.label, value: 0 }))
-  for (const o of growthOrders) {
-    const i = idxOf.get(keyOf(o.createdAt))
-    if (i !== undefined) ordersSeries[i].value++
-  }
+  const newUsersCur = users.filter((u) => inCur(u.createdAt)).length
+  const newUsersPrev = users.filter((u) => inPrev(u.createdAt)).length
+  const newOrdersCur = ordersCreated.filter((o) => inCur(o.createdAt)).length
+  const newOrdersPrev = ordersCreated.filter((o) => inPrev(o.createdAt)).length
 
-  const sum = (arr: { _count: { _all: number } }[]) =>
-    arr.reduce((s, x) => s + x._count._all, 0)
+  const gmvCur = completed
+    .filter((o) => o.completedAt && inCur(o.completedAt))
+    .reduce((s, o) => s + o.priceCents, 0)
+  const gmvPrev = completed
+    .filter((o) => o.completedAt && inPrev(o.completedAt))
+    .reduce((s, o) => s + o.priceCents, 0)
+  const completedCur = completed.filter(
+    (o) => o.completedAt && inCur(o.completedAt),
+  ).length
+
+  const roleCount = Object.fromEntries(
+    comp.map((c) => [c.role, c._count]),
+  ) as Record<string, number>
+  const statusCount = Object.fromEntries(
+    statusGroup.map((s) => [s.status, s._count]),
+  ) as Record<string, number>
 
   return {
-    users: {
-      total: role('CLIENT') + role('MASTER') + role('ADMIN'),
-      clients: role('CLIENT'),
-      masters: role('MASTER'),
-      admins: role('ADMIN'),
-      emailVerified,
+    period,
+    kpi: {
+      newUsers: {
+        value: newUsersCur,
+        delta: pctDelta(newUsersCur, newUsersPrev),
+      },
+      newOrders: {
+        value: newOrdersCur,
+        delta: pctDelta(newOrdersCur, newOrdersPrev),
+      },
+      gmvCents: { value: gmvCur, delta: pctDelta(gmvCur, gmvPrev) },
+      avgOrderCents: completedCur ? Math.round(gmvCur / completedCur) : 0,
     },
-    masters: {
-      verified: verif('VERIFIED'),
-      pending: verif('PENDING'),
-      rejected: verif('REJECTED'),
-      none: verif('NONE'),
-      active: mastersActive,
+    series,
+    composition: {
+      clients: roleCount.CLIENT ?? 0,
+      masters: roleCount.MASTER ?? 0,
     },
-    jobs: {
-      open: job('OPEN'),
-      inProgress: job('IN_PROGRESS'),
-      completed: job('COMPLETED'),
-      cancelled: job('CANCELLED'),
-      expired: job('EXPIRED'),
-      total: sum(jobsByStatus),
-    },
-    orders: {
-      created: order('CREATED'),
-      inProgress: order('IN_PROGRESS'),
-      completed: order('COMPLETED'),
-      cancelled: order('CANCELLED'),
-      total: sum(ordersByStatus),
-      gmvCents: gmv._sum.priceCents ?? 0,
+    orderStatus: {
+      created: statusCount.CREATED ?? 0,
+      inProgress: statusCount.IN_PROGRESS ?? 0,
+      completed: statusCount.COMPLETED ?? 0,
+      cancelled: statusCount.CANCELLED ?? 0,
     },
     activity: {
-      proposals,
-      reviews: reviewsAgg._count._all,
-      avgReview: reviewsAgg._avg.rating ?? 0,
+      reviews: reviewAgg._count,
+      avgReview: reviewAgg._avg.rating ?? 0,
       chats,
       messages,
-    },
-    growth: {
-      users: usersSeries,
-      clients: clientsSeries,
-      masters: mastersSeries,
-      orders: ordersSeries,
+      proposals,
     },
   }
 }
