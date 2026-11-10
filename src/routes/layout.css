@@ -5,6 +5,8 @@
 @import '@fontsource-variable/roboto';
 @import '@fontsource-variable/noto-sans';
 
+@import '$lib/styles/liquid-glass.css';
+
 @custom-variant dark (&:is(.dark *));
 
 :root {
@@ -168,6 +170,38 @@
   --n-text: #c084fc;
 }
 
+:root,
+[data-theme='light'] {
+  --c-glass: #bbbbbc;
+  --c-light: #fff;
+  --c-dark: #000;
+  --c-content: #224;
+  --c-action: #0052f5;
+  --c-bg: #e8e8e9;
+  --glass-reflex-dark: 1;
+  --glass-reflex-light: 1;
+  --saturation: 150%;
+}
+
+[data-theme='dark'] {
+  --c-content: #e1e1e1;
+  --c-action: #03d5ff;
+  --c-bg: #1b1b1d;
+  --glass-reflex-dark: 2;
+  --glass-reflex-light: 0.3;
+}
+
+[data-theme='dim'] {
+  --c-light: #99deff;
+  --c-dark: #20001b;
+  --c-glass: hsl(335 250% 74% / 1);
+  --c-content: #d5dbe2;
+  --c-action: #ff48a9;
+  --c-bg: #152433;
+  --glass-reflex-dark: 2;
+  --glass-reflex-light: 0.7;
+  --saturation: 200%;
+}
 @theme inline {
   --font-sans: 'Roboto Variable', sans-serif;
   --color-sidebar-ring: var(--sidebar-ring);

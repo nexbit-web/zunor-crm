@@ -198,7 +198,7 @@
         disabled={refreshing}
         aria-label="Оновити"
         title="Оновити"
-        class="border-border text-muted-foreground hover:text-foreground hover:bg-muted inline-flex size-9 items-center justify-center rounded-lg border transition-colors disabled:opacity-60"
+        class="border-border apple-glass-card text-muted-foreground hover:text-foreground hover:bg-muted inline-flex size-9 items-center justify-center rounded-lg border transition-colors disabled:opacity-60"
       >
         <RefreshCw size={16} class={refreshing ? 'animate-spin' : ''} />
       </button>
@@ -406,3 +406,23 @@
     </Card.Content>
   </Card.Root>
 </div>
+
+<style>
+.apple-glass-panel {
+  /* Эффект матового стекла (размытие заднего плана) */
+  backdrop-filter: blur(40px) saturate(210%);
+  -webkit-backdrop-filter: blur(40px) saturate(210%);
+  
+  /* Полупрозрачный премиальный фон (для темной темы) */
+  background: rgba(28, 28, 30, 0.65);
+  
+  /* Тонкая глянцевая граница (имитация среза стекла) */
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  
+  /* Скругление в стиле Apple (iOS 17+) */
+  border-radius: 20px;
+  
+  /* Мягкая глубокая тень */
+  box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.4);
+}
+</style>
